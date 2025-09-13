@@ -5,190 +5,192 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>For My Special Girl 💖</title>
 <style>
-body { margin:0; font-family:'Poppins',sans-serif; background:linear-gradient(to top,#0f2027,#203a43,#2c5364); color:white; overflow-x:hidden; }
-h1,h2,h3{text-align:center;}
-.menu{ display:flex; flex-wrap:wrap; justify-content:center; gap:15px; margin-top:30px; }
-.menu button{ background: rgba(255,255,255,0.1); border: 2px solid #ff9ff3; border-radius: 12px; padding: 15px 20px; font-size: 1em; color:white; cursor:pointer; transition:0.3s; text-shadow:0 0 10px #ff6b81; }
-.menu button:hover{ background:#ff6b81; box-shadow:0 0 15px #f368e0; }
-.modal{ display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); justify-content:center; align-items:center; flex-direction:column; z-index:10; padding:20px; overflow:auto; }
-.modal.active{display:flex;}
-.modal h2{margin-bottom:20px;}
-.closeBtn{ margin-top:20px; padding:10px 20px; border:none; border-radius:8px; background:#ff6b81; color:white; cursor:pointer; }
-canvas{background:transparent; display:block; margin:auto;}
-.flower{ font-size:2em; cursor:pointer; margin:10px; display:inline-block; transition:0.5s transform; }
-.flower:hover{ transform:scale(1.5); }
-.polaroid{ width:150px; height:150px; margin:10px; perspective:1000px; display:inline-block; }
-.polaroid-inner{ position:relative; width:100%; height:100%; transition:transform 0.8s; transform-style:preserve-3d; }
-.polaroid:hover .polaroid-inner{ transform:rotateY(180deg); }
-.polaroid-front, .polaroid-back{ position:absolute; width:100%; height:100%; backface-visibility:hidden; border-radius:10px; }
-.polaroid-front{ background:#fff; display:flex; justify-content:center; align-items:center; color:black; font-weight:bold; }
-.polaroid-back{ background:#ff6b81; color:white; transform:rotateY(180deg); display:flex; justify-content:center; align-items:center; text-align:center; padding:5px; }
+  body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    overflow: hidden;
+    background: #07051a;
+    color: white;
+    cursor: none;
+  }
+  h1 { text-align: center; margin-top: 20px; text-shadow: 0 0 15px #ff6b81; }
+  /* Spinner */
+  #spinnerContainer { text-align:center; margin:20px; }
+  #wheel { width:300px; height:300px; border-radius:50%; border:5px solid #ff6b81; margin:auto; display:flex; justify-content:center; align-items:center; font-weight:bold; font-size:1.2em; cursor:pointer; transition: transform 4s cubic-bezier(0.33, 1, 0.68, 1);}
+  /* Polaroid wall */
+  #polaroidWall { display:flex; flex-wrap:wrap; justify-content:center; margin:20px; gap:15px; }
+  .polaroid { width:150px; height:100px; background:white; border-radius:8px; overflow:hidden; cursor:pointer; transform-style: preserve-3d; transition: transform 0.8s; position:relative;}
+  .polaroid.flipped { transform: rotateY(180deg);}
+  .polaroid img, .polaroid .message { position:absolute; width:100%; height:100%; backface-visibility: hidden; display:flex; justify-content:center; align-items:center; text-align:center; padding:5px;}
+  .polaroid .message { transform: rotateY(180deg); background:#ff6b81; color:white; font-size:0.9em; border-radius:8px;}
+  /* Garden flowers */
+  #garden { display:flex; justify-content:center; gap:15px; margin:20px; }
+  .flower { font-size:2em; cursor:pointer; position:relative;}
+  .flowerMessage { position:absolute; top:-30px; left:50%; transform:translateX(-50%); color:#ff6b81; font-weight:bold; animation: floatup 2s forwards; opacity:0;}
+  @keyframes floatup { 0% {opacity:0; transform:translateX(-50%) translateY(0);} 100% {opacity:1; transform:translateX(-50%) translateY(-50px);} }
+  /* Love trail */
+  .heart { position:absolute; color:#ff6b81; font-size:16px; pointer-events:none; animation: fadeheart 1s forwards;}
+  @keyframes fadeheart { 0% {opacity:1; transform:translateY(0);} 100% {opacity:0; transform:translateY(-30px);} }
 </style>
 </head>
 <body>
 
 <h1>For My Special Girl 💖</h1>
-<p style="text-align:center;">Choose a surprise ✨</p>
 
-<div class="menu">
-    <button onclick="openModal('starModal')">🌌 Star Map</button>
-    <button onclick="openModal('spinnerModal')">🎡 Love Spinner</button>
-    <button onclick="openModal('gardenModal')">🌹 Love Garden</button>
-    <button onclick="openModal('polaroidModal')">🖼️ Polaroid Wall</button>
+<!-- Spinner -->
+<div id="spinnerContainer">
+  <div id="wheel">Spin Me</div>
+  <p id="wheelMessage" style="text-align:center; margin-top:10px;"></p>
 </div>
 
-<!-- Star Modal -->
-<div class="modal" id="starModal">
-    <h2>🌌 Star Map</h2>
-    <canvas id="starsCanvas" width="600" height="400"></canvas>
-    <button class="closeBtn" onclick="closeModal('starModal')">Close</button>
-</div>
+<!-- Love Garden -->
+<div id="garden"></div>
 
-<!-- Spinner Modal -->
-<div class="modal" id="spinnerModal">
-    <h2>🎡 Love Spinner</h2>
-    <canvas id="spinnerCanvas" width="400" height="400"></canvas>
-    <button id="spinBtn" class="closeBtn">Spin!</button>
-    <p id="spinnerResult"></p>
-    <button class="closeBtn" onclick="closeModal('spinnerModal')">Close</button>
-</div>
+<!-- Polaroid Wall -->
+<div id="polaroidWall"></div>
 
-<!-- Garden Modal -->
-<div class="modal" id="gardenModal">
-    <h2>🌹 Love Garden</h2>
-    <div id="gardenArea"></div>
-    <button class="closeBtn" onclick="closeModal('gardenModal')">Close</button>
-</div>
-
-<!-- Polaroid Modal -->
-<div class="modal" id="polaroidModal">
-    <h2>🖼️ Polaroid Wall</h2>
-    <div id="polaroidArea"></div>
-    <button class="closeBtn" onclick="closeModal('polaroidModal')">Close</button>
-</div>
-
-<audio id="bgSong" src="https://aac.saavncdn.com/631/4d3a01f7f853a1d3dbed1d6d7e142d10_160.mp4" autoplay loop></audio>
+<!-- Canvas for stars -->
+<canvas id="starCanvas"></canvas>
 
 <script>
-// Modal
-function openModal(id){document.getElementById(id).classList.add('active');}
-function closeModal(id){document.getElementById(id).classList.remove('active');}
-
-// Star Map
-const starCanvas=document.getElementById('starsCanvas');
-const ctx=starCanvas.getContext('2d');
-const stars=[];
-const starNotes=[
-"Your smile brightens my day 💖","Every moment with you is magic ✨","You’re my sweetest dream ❤️","My heart beats for you 💓",
-"You make life beautiful 🌸","You are my sunshine ☀️","Forever grateful for you 💕","You complete me 🌹",
-"Being with you feels like home 🏡","You inspire me every day 💪","You are my happy place 😍","Your laugh is my melody 🎶",
-"With you, love grows stronger 💞","You are my heart’s desire 💗","Life is brighter because of you 🌟","You make me whole 🥰",
-"My soul smiles with you 😊","You are my forever 💖","I cherish every moment with you 💌","You are my magic ✨"
-// ... up to 100 unique notes
+const messagesStars = [
+  "You light up my life ✨","Forever in my heart 💖","You are my sunshine ☀️",
+  "Love you endlessly 💘","You make my heart smile 😊","Dreaming of you 🌙",
+  "You are my motivation 💪","Every moment with you is magic ✨","You complete me 💞",
+  "My love grows for you ❤️","You are my happiness 😊","You are my world 🌍",
+  "I adore you 💖","Your smile is my sunshine ☀️","You make life beautiful 🌸",
+  "I cherish you 💘","You are my heart 💓","I’m yours forever 💞","Love you to the moon 🌙",
+  "You are my everything 💕","You inspire me daily 💪","My love for you never ends 💖",
+  "You are my angel 😇","You are my dream come true ✨","You are my treasure 💎",
+  "You are amazing 💫","You are my heartbeat ❤️","I can’t stop thinking of you 😘",
+  "You are my star 🌟","You make me happy 😊","You are my soulmate 💞","You are perfection 💖",
+  "Every day I love you more 💘","You are my world 🌎","You complete me 💖","You are my angel 💫",
+  "You are beautiful 🌸","You make my heart race ❤️","I’m lucky to have you 🍀","You are magical ✨",
+  "You are my dream 🌙","You are my happiness 😊","Forever yours 💞","My heart is yours 💓",
+  "You are adorable 😍","You are my shining star 🌟","You are the love of my life 💖",
+  "You make everything better 🌸","You are precious 💎","I love your soul 💘","You are my light ☀️",
+  "You are my destiny 💫","You are perfect for me 💞","I adore everything about you 💖","You are my world 🌍",
+  "You are my life 💓","You make me smile every day 😊","You are my love 💘","You are amazing 💫",
+  "You are my heart ❤️","You are my everything 💕","You are my joy 🌸","You are my treasure 💎",
+  "I love you endlessly 💖","You are my reason 💞","You are my dream girl 🌙","You are my inspiration 💪",
+  "You are my angel 😇","You are my star 🌟","You are my soulmate 💖","You make life beautiful 🌸",
+  "You are my happiness 😊","I adore you 💘","You are my heartbeat ❤️","You are magical ✨",
+  "You are my light 💫","I love your smile 😘","You are my darling 💖","You are my muse 💞",
+  "You are amazing 💕","You are my sweet love 🌸","You are my everything 💘","You make me complete 💖",
+  "You are my joy 💓","You are my world 🌍","I cherish you 💖","You are my heartbeat ❤️","You are my life 💞"
 ];
-while(stars.length<100){
-    stars.push({x:Math.random()*600, y:Math.random()*400, r:Math.random()*2+1, note:starNotes[stars.length%starNotes.length]});
+
+// Stars canvas
+const canvas = document.getElementById('starCanvas');
+const ctx = canvas.getContext('2d');
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+let stars = [];
+for(let i=0;i<100;i++){
+  stars.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height,r:Math.random()*2+1,msg:messagesStars[i],blink:Math.random()*1});
 }
 function drawStars(){
-    ctx.clearRect(0,0,600,400);
-    stars.forEach(s=>{
-        ctx.beginPath();
-        ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
-        ctx.fillStyle='white';
-        ctx.shadowBlur=10;
-        ctx.shadowColor='pink';
-        ctx.fill();
-    });
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  stars.forEach(s=>{
+    ctx.beginPath();
+    ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+    ctx.fillStyle = `rgba(255,255,255,${Math.abs(Math.sin(s.blink))})`;
+    ctx.fill();
+    s.blink+=0.05;
+  });
+  requestAnimationFrame(drawStars);
 }
-starCanvas.addEventListener('click', function(e){
-    const rect=starCanvas.getBoundingClientRect();
-    const mx=e.clientX-rect.left;
-    const my=e.clientY-rect.top;
-    stars.forEach(s=>{
-        const dist=Math.sqrt((mx-s.x)**2+(my-s.y)**2);
-        if(dist<s.r+5){ alert(s.note); }
-    });
+drawStars();
+canvas.addEventListener('click',(e)=>{
+  stars.forEach(s=>{
+    if(Math.hypot(e.x-s.x,e.y-s.y)<10){
+      const note=document.createElement('div');
+      note.style.position='absolute';
+      note.style.left=s.x+'px';
+      note.style.top=s.y+'px';
+      note.style.color='#ff6b81';
+      note.style.fontWeight='bold';
+      note.style.fontSize='16px';
+      note.style.transform='translate(-50%,-50%)';
+      note.innerText=s.msg;
+      document.body.appendChild(note);
+      setTimeout(()=>note.remove(),2000);
+    }
+  });
 });
-setInterval(drawStars,100);
 
 // Spinner
-const spinnerCanvas=document.getElementById('spinnerCanvas');
-const sCtx=spinnerCanvas.getContext('2d');
-const spinnerOptions=[
-"💖 You light up my world","❤️ Forever yours, my love","✨ Every moment with you is magic",
-"💕 You’re my sweetest dream","💓 My heart beats for you","🌹 You complete me",
-"💌 You’re my love letter","🌟 You shine brighter than stars","🥰 Every second with you is precious",
-"💗 You make life beautiful","💞 I cherish every memory with you","💖 You are my happy place",
-"💓 Love grows stronger with you","🌸 You are my heart’s desire","💌 You make my soul smile",
-"🔥 You ignite my passion","🌈 Life is colorful because of you","💖 You are my forever",
-"✨ My world is brighter with you","❤️ You are my one and only"
+const wheel=document.getElementById('wheel');
+const wheelMsg=document.getElementById('wheelMessage');
+const spinnerMessages=[
+  "You make my heart race ❤️","Forever yours 💞","My love for you 💖","You are my sunshine ☀️",
+  "Dreaming of you 🌙","You complete me 💘","You are amazing 💫","You are my joy 🌸",
+  "You are my treasure 💎","You inspire me 💪","You are my angel 😇","I adore you 💘",
+  "You are my happiness 😊","You are magical ✨","You are perfect 💖","You are my heartbeat ❤️",
+  "You are my soulmate 💞","I love your smile 😘","You are adorable 😍","You are my darling 💖"
 ];
-const numSlices=spinnerOptions.length;
-let angle=0;
-function drawSpinner(){
-    const radius=180;
-    const cx=200,cy=200;
-    const sliceAngle=(2*Math.PI)/numSlices;
-    sCtx.clearRect(0,0,400,400);
-    for(let i=0;i<numSlices;i++){
-        sCtx.beginPath();
-        sCtx.moveTo(cx,cy);
-        sCtx.arc(cx,cy,radius,i*sliceAngle+angle,(i+1)*sliceAngle+angle);
-        sCtx.fillStyle=i%2===0?'#ff6b81':'#ff9ff3';
-        sCtx.fill();
-        sCtx.save();
-        sCtx.translate(cx,cy);
-        sCtx.rotate(i*sliceAngle+sliceAngle/2+angle);
-        sCtx.fillStyle='white';
-        sCtx.textAlign='right';
-        sCtx.font='14px Poppins';
-        sCtx.fillText(spinnerOptions[i],radius-10,5);
-        sCtx.restore();
-    }
-}
-drawSpinner();
-document.getElementById('spinBtn').addEventListener('click', ()=>{
-    let spins=Math.random()*10+10;
-    let spinInterval=setInterval(()=>{
-        angle+=0.3;
-        spins-=0.3;
-        drawSpinner();
-        if(spins<=0){ clearInterval(spinInterval); const result=Math.floor((angle%(2*Math.PI))/(2*Math.PI/numSlices)); document.getElementById('spinnerResult').innerText=spinnerOptions[result]; }
-    },20);
+wheel.addEventListener('click',()=>{
+  const rand=Math.floor(Math.random()*spinnerMessages.length);
+  const deg=360*5 + rand*(360/spinnerMessages.length);
+  wheel.style.transform=`rotate(${deg}deg)`;
+  setTimeout(()=>{ wheelMsg.innerText=spinnerMessages[rand]; },4000);
 });
 
-// Garden
-const gardenArea=document.getElementById('gardenArea');
-const gardenFlowers=[
-{emoji:'🌸',msg:'You make my heart bloom 💖'}, {emoji:'🌺',msg:'Forever yours ❤️'},
-{emoji:'🌷',msg:'Every moment is magic ✨'}, {emoji:'🌹',msg:'You’re my sweetest dream 💕'},
-{emoji:'💐',msg:'My love grows for you 💓'}, {emoji:'🌻',msg:'Life is brighter with you 🌞'},
-{emoji:'🥀',msg:'You complete me 💌'}, {emoji:'🌼',msg:'You are my happy place 🥰'},
-{emoji:'🌸',msg:'Love grows stronger every day 💞'}, {emoji:'🌺',msg:'You are my forever 💖'}
+// Love Garden
+const garden=document.getElementById('garden');
+const flowerMessages=[
+  "You are my rose 🌹","My heart beats for you 💓","You make life sweet 🍬",
+  "Forever and always 💞","You are my dream 🌙","My love grows daily 💖",
+  "You are my sunshine ☀️","You make me smile 😊","You are my treasure 💎",
+  "You are my happiness 💕"
 ];
-gardenFlowers.forEach(f=>{
-    const span=document.createElement('span');
-    span.classList.add('flower');
-    span.innerText=f.emoji;
-    span.title=f.msg;
-    gardenArea.appendChild(span);
+flowerMessages.forEach(msg=>{
+  const f=document.createElement('div');
+  f.className='flower';
+  f.innerText='🌸';
+  const fm=document.createElement('div');
+  fm.className='flowerMessage';
+  fm.innerText=msg;
+  f.appendChild(fm);
+  f.addEventListener('click',()=>{ fm.style.opacity='1'; fm.style.animation='floatup 2s forwards'; });
+  garden.appendChild(f);
 });
 
-// Polaroid Wall
-const polaroidArea=document.getElementById('polaroidArea');
-const polaroids=[
-{img:'https://cdn.pixabay.com/photo/2017/01/06/19/15/bmw-1955683_1280.jpg',text:'BMW - You drive me crazy 💓'},
-{img:'https://cdn.pixabay.com/photo/2016/11/29/07/11/porsche-1868831_1280.jpg',text:'Porsche - You race through my heart ❤️'},
-{img:'https://cdn.pixabay.com/photo/2016/11/19/15/36/pagani-1836011_1280.jpg',text:'Pagani - My love accelerates with you 💖'},
-{img:'https://cdn.pixabay.com/photo/2017/05/21/00/38/koenigsegg-2331975_1280.jpg',text:'Koenigsegg - You are my ultimate ❤️'},
-{img:'https://cdn.pixabay.com/photo/2018/02/02/13/17/lamborghini-3128972_1280.jpg',text:'Lamborghini - You take my breath away 💓'},
-{img:'https://cdn.pixabay.com/photo/2016/11/18/13/14/ferrari-1834636_1280.jpg',text:'Ferrari - You own my heart 💖'}
+// Polaroid wall
+const polaroidWall=document.getElementById('polaroidWall');
+const cars=[
+  {img:'https://cdn.pixabay.com/photo/2017/02/05/22/28/bmw-2049390_1280.jpg',msg:'You drive me crazy 💖'},
+  {img:'https://cdn.pixabay.com/photo/2017/03/23/08/52/porsche-2167082_1280.jpg',msg:'You are my speedster 💞'},
+  {img:'https://cdn.pixabay.com/photo/2016/03/27/22/18/ferrari-1284307_1280.jpg',msg:'You are my dream ride 💘'},
+  {img:'https://cdn.pixabay.com/photo/2015/07/02/22/25/lamborghini-828828_1280.jpg',msg:'You are my luxury 💎'},
+  {img:'https://cdn.pixabay.com/photo/2016/05/21/13/04/pagani-1400681_1280.jpg',msg:'You are my masterpiece 💫'},
+  {img:'https://cdn.pixabay.com/photo/2016/03/27/22/18/koenigsegg-1284323_1280.jpg',msg:'You are my supercar 💕'}
 ];
-polaroids.forEach(p=>{
-    const div=document.createElement('div'); div.classList.add('polaroid');
-    div.innerHTML=`<div class="polaroid-inner"><div class="polaroid-front"><img src="${p.img}" style="width:100%;height:100%;border-radius:8px"></div><div class="polaroid-back">${p.text}</div></div>`;
-    polaroidArea.appendChild(div);
+cars.forEach(c=>{
+  const p=document.createElement('div');
+  p.className='polaroid';
+  const img=document.createElement('img');
+  img.src=c.img;
+  p.appendChild(img);
+  const m=document.createElement('div');
+  m.className='message';
+  m.innerText=c.msg;
+  p.appendChild(m);
+  p.addEventListener('click',()=>{p.classList.toggle('flipped');});
+  polaroidWall.appendChild(p);
+});
+
+// Love trail cursor
+document.addEventListener('mousemove',e=>{
+  const heart=document.createElement('div');
+  heart.className='heart';
+  heart.style.left=e.clientX+'px';
+  heart.style.top=e.clientY+'px';
+  heart.innerText='❤️';
+  document.body.appendChild(heart);
+  setTimeout(()=>heart.remove(),1000);
 });
 </script>
 </body>
 </html>
+
