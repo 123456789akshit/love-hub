@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For My Special Girl 💖</title>
+<style>
+  body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background: radial-gradient(ellipse at bottom, #0f2027, #203a43, #2c5364);
+    color: white;
+    overflow-x: hidden;
+  }
+  h1, h2 { text-align:center; }
+  .menu {
+    display: flex; flex-wrap: wrap; justify-content:center; gap:15px; margin-top:40px;
+  }
+  .menu button {
+    background: rgba(255,255,255,0.1); border:2px solid #ff9ff3; border-radius:12px;
+    padding:15px 20px; font-size:1em; color:white; cursor:pointer; transition:0.3s;
+    text-shadow:0 0 10px #ff6b81; animation: glow 2s infinite alternate;
+  }
+  .menu button:hover { background:#ff6b81; box-shadow:0 0 15px #f368e0; }
+  .modal {
+    display:none; position:fixed; top:0; left:0; width:100%; height:100%;
+    background:rgba(0,0,0,0.9); justify-content:center; align-items:center;
+    flex-direction:column; z-index:10; padding:20px;
+  }
+  .modal.active { display:flex; }
+  .modal h2 { margin-bottom:20px; }
+  .closeBtn {
+    margin-top:20px; padding:10px 20px; border:none; border-radius:8px;
+    background:#ff6b81; color:white; cursor:pointer;
+  }
+  @keyframes glow {
+    from { text-shadow:0 0 10px #ff6b81; }
+    to { text-shadow:0 0 20px #f368e0; }
+  }
+  canvas { background:transparent; display:block; margin:0 auto; }
+  .spinner { width:300px; height:300px; border-radius:50%; border:5px solid #ff6b81; position:relative; margin:auto; }
+  .spinner div { position:absolute; width:50%; height:50%; top:0; left:50%; transform-origin:0% 100%; text-align:right; padding-right:10px; font-weight:bold; }
+  .polaroid { width:120px; height:120px; perspective:1000px; display:inline-block; margin:10px; cursor:pointer; }
+  .polaroid-inner { position:relative; width:100%; height:100%; text-align:center; transition: transform 0.8s; transform-style:preserve-3d; }
+  .polaroid.flipped .polaroid-inner { transform:rotateY(180deg); }
+  .polaroid-front, .polaroid-back {
+    position:absolute; width:100%; height:100%; backface-visibility:hidden; border-radius:10px;
+  }
+  .polaroid-front { background:#ff6b81; display:flex; align-items:center; justify-content:center; }
+  .polaroid-back { background:#f368e0; transform:rotateY(180deg); display:flex; align-items:center; justify-content:center; }
+  .flower { width:60px; height:60px; margin:10px; cursor:pointer; display:inline-block; background:#ff6b81; border-radius:50%; animation: bloom 0s forwards; }
+  @keyframes bloom { 0% {transform:scale(0);} 100% {transform:scale(1);} }
+  .heart { position:absolute; font-size:24px; animation: floatUp 2s forwards; }
+  @keyframes floatUp { 0%{opacity:1; transform:translateY(0);} 100%{opacity:0; transform:translateY(-200px);} }
+</style>
+</head>
+<body>
+
+<h1>For My Special Girl 💖</h1>
+<p style="text-align:center;">Click a surprise ✨</p>
+<div class="menu">
+  <button onclick="openModal('starModal')">🌌 Star Map</button>
+  <button onclick="openModal('spinnerModal')">🎡 Love Spinner</button>
+  <button onclick="openModal('cookieModal')">🥠 Fortune Cookie</button>
+  <button onclick="openModal('gardenModal')">🌹 Love Garden</button>
+  <button onclick="openModal('polaroidModal')">🖼️ Polaroid Wall</button>
+  <button onclick="openModal('treasureModal')">🗝️ Treasure Hunt</button>
+  <button onclick="secretLove()">🎮 Secret Love Code</button>
+  <button onclick="openModal('songModal')">🎶 Special Song</button>
+</div>
+
+<!-- 🌌 Star Map -->
+<div class="modal" id="starModal">
+  <h2>🌌 Star Map</h2>
+  <canvas id="starsCanvas" width="600" height="400"></canvas>
+  <button class="closeBtn" onclick="closeModal('starModal')">Close</button>
+</div>
+
+<!-- 🎡 Spinner -->
+<div class="modal" id="spinnerModal">
+  <h2>🎡 Love Spinner</h2>
+  <div class="spinner" id="spinner">
+    <div style="transform:rotate(0deg)">Love</div>
+    <div style="transform:rotate(45deg)">Hug</div>
+    <div style="transform:rotate(90deg)">Kiss</div>
+    <div style="transform:rotate(135deg)">Smile</div>
+    <div style="transform:rotate(180deg)">Hug</div>
+    <div style="transform:rotate(225deg)">Romantic</div>
+    <div style="transform:rotate(270deg)">Sweet</div>
+    <div style="transform:rotate(315deg)">Forever</div>
+  </div>
+  <button class="closeBtn" onclick="closeModal('spinnerModal')">Close</button>
+  <button class="closeBtn" onclick="spinWheel()">Spin 💫</button>
+</div>
+
+<!-- 🥠 Fortune Cookie -->
+<div class="modal" id="cookieModal">
+  <h2>🥠 Fortune Cookie</h2>
+  <p id="cookieMsg">Click the cookie to reveal!</p>
+  <button class="closeBtn" onclick="revealCookie()">Crack Cookie 🍪</button>
+  <button class="closeBtn" onclick="closeModal('cookieModal')">Close</button>
+</div>
+
+<!-- 🌹 Love Garden -->
+<div class="modal" id="gardenModal">
+  <h2>🌹 Love Garden</h2>
+  <div id="garden"></div>
+  <button class="closeBtn" onclick="bloomFlower()">Bloom Flower 🌸</button>
+  <button class="closeBtn" onclick="closeModal('gardenModal')">Close</button>
+</div>
+
+<!-- 🖼️ Polaroid Wall -->
+<div class="modal" id="polaroidModal">
+  <h2>🖼️ Polaroid Wall</h2>
+  <div id="polaroids"></div>
+  <button class="closeBtn" onclick="closeModal('polaroidModal')">Close</button>
+</div>
+
+<!-- 🗝️ Treasure Hunt -->
+<div class="modal" id="treasureModal">
+  <h2>🗝️ Treasure Hunt</h2>
+  <p id="riddleText"></p>
+  <input type="text" id="riddleAnswer" placeholder="Your answer">
+  <button class="closeBtn" onclick="submitRiddle()">Submit</button>
+  <button class="closeBtn" onclick="closeModal('treasureModal')">Close</button>
+  <p id="treasureMsg"></p>
+</div>
+
+<!-- 🎶 Special Song -->
+<div class="modal" id="songModal">
+  <h2>🎶 Special Song</h2>
+  <p>Click the glowing heart 💖 to play</p>
+  <button id="playSongBtn" style="font-size:2em; background:none; border:none; cursor:pointer; animation:glow 1.5s infinite alternate;">❤️</button>
+  <audio id="specialSong" preload="auto">
+    <source src="https://aac.saavncdn.com/631/4d3a01f7f853a1d3dbed1d6d7e142d10_160.mp4" type="audio/mp4">
+  </audio>
+  <button class="closeBtn" onclick="closeModal('songModal')">Close</button>
+</div>
+
+<script>
+/* Modal Open/Close */
+function openModal(id){document.getElementById(id).classList.add('active');}
+function closeModal(id){document.getElementById(id).classList.remove('active');}
+
+/* Star Map */
+const canvas = document.getElementById('starsCanvas');
+const ctx = canvas.getContext('2d');
+const stars = [];
+for(let i=0;i<100;i++){stars.push({x:Math.random()*600,y:Math.random()*400,r:Math.random()*2+1, note:`Love Note ${i+1}`});}
+function drawStars(){ctx.clearRect(0,0,600,400);stars.forEach(s=>{ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);ctx.fillStyle='white';ctx.fill();});requestAnimationFrame(drawStars);}
+canvas.addEventListener('click',e=>{const rect=canvas.getBoundingClientRect();const mx=e.clientX-rect.left,my=e.clientY-rect.top;stars.forEach(s=>{if(Math.hypot(mx-s.x,my-s.y)<10){alert(s.note);}});});
+drawStars();
+
+/* Spinner */
+function spinWheel(){
+  const wheel = document.getElementById('spinner');
+  const deg = Math.floor(3600 + Math.random()*360);
+  wheel.style.transition='transform 4s ease-out';
+  wheel.style.transform=`rotate(${deg}deg)`;
+}
+
+/* Fortune Cookie */
+const cookieMessages = ["You are amazing ❤️","Forever my love 💖","Keep smiling 😊","You are my treasure 💎"];
+function revealCookie(){document.getElementById('cookieMsg').innerText=cookieMessages[Math.floor(Math.random()*cookieMessages.length)];}
+
+/* Love Garden */
+const garden = document.getElementById('garden');
+const flowerNotes = ["You bloom my life 💐","My heart is yours ❤️","Love grows here 🌹"];
+function bloomFlower(){
+  const flower = document.createElement('div');
+  flower.className='flower';
+  flower.title = flowerNotes[Math.floor(Math.random()*flowerNotes.length)];
+  garden.appendChild(flower);
+}
+
+/* Polaroid Wall */
+const polaroids = document.getElementById('polaroids');
+for(let i=0;i<6;i++){
+  const card = document.createElement('div');
+  card.className='polaroid';
+  card.innerHTML=`<div class="polaroid-inner"><div class="polaroid-front">Photo ${i+1}</div><div class="polaroid-back">Love Note ${i+1}</div></div>`;
+  card.onclick=()=>{card.classList.toggle('flipped');};
+  polaroids.appendChild(card);
+}
+
+/* Treasure Hunt */
+const riddles = [{q:"I shine at night, click me for light. What am I?",a:"star"},{q:"I spin and land, messages in hand. What am I?",a:"spinner"},{q:"I bloom and grow, love I show. What am I?",a:"flower"}];
+let riddleIndex = 0;
+document.getElementById('riddleText').innerText = riddles[riddleIndex].q;
+function submitRiddle(){
+  const ans = document.getElementById('riddleAnswer').value.toLowerCase();
+  if(ans===riddles[riddleIndex].a){riddleIndex++; if(riddleIndex<riddles.length){document.getElementById('riddleText').innerText=riddles[riddleIndex].q;}else{document.getElementById('treasureMsg').innerText="You're My Treasure ❤️"; document.getElementById('riddleText').innerText='';}}else{alert("Try again!");}
+  document.getElementById('riddleAnswer').value='';
+}
+
+/* Secret Love Code */
+function secretLove(){
+  const code = prompt("Type the secret code:").toUpperCase();
+  if(code==="LOVE"){
+    for(let i=0;i<50;i++){
+      const h = document.createElement('div'); h.className='heart'; h.style.left=Math.random()*window.innerWidth+'px'; h.style.top=window.innerHeight+'px'; h.innerText='❤️';
+      document.body.appendChild(h);
+      setTimeout(()=>{h.remove();},2000);
+    }
+    alert("You are my everything 💖");
+  }else{alert("Wrong code!");}
+}
+
+/* Special Song */
+const playSongBtn = document.getElementById("playSongBtn");
+const specialSong = document.getElementById("specialSong");
+playSongBtn.addEventListener("click", ()=>{
+  specialSong.play();
+  playSongBtn.innerText="🎵 Playing...";
+});
+</script>
+
+</body>
+</html>
