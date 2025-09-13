@@ -1,40 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>For My Love ❤️</title>
   <style>
     body {
       margin: 0;
-      font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(to top right, #0d1b2a, #1b263b, #415a77);
+      font-family: "Poppins", sans-serif;
+      background: linear-gradient(to bottom, #0d0d2b, #1a0033);
       color: white;
       text-align: center;
       overflow-x: hidden;
     }
-    h1 {
-      margin: 20px;
-      font-size: 2.5rem;
-      color: #ffb6c1;
-    }
-    section { padding: 40px 20px; }
 
-    /* ===== Stars Section ===== */
-    #starCanvas {
-      display: block;
-      margin: 0 auto;
-      background: black;
-      border: 2px solid #fff;
-      border-radius: 10px;
+    h1 {
+      margin-top: 20px;
+      font-size: 2.5em;
     }
-    .floatingNote {
+
+    /* === Background Stars === */
+    .star {
       position: absolute;
-      color: #ff99cc;
-      font-size: 1rem;
+      width: 6px;
+      height: 6px;
+      background: white;
+      border-radius: 50%;
+      cursor: pointer;
+      animation: twinkle 2s infinite ease-in-out;
+    }
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.3; }
+      50% { opacity: 1; }
+    }
+
+    /* Floating Notes (stars + spinner) */
+    .floating-note {
+      position: absolute;
+      color: #ffccff;
+      font-size: 1em;
       font-weight: bold;
-      text-shadow: 0 0 10px #fff, 0 0 20px #ff4d6d;
-      animation: floatUp 2s ease-out forwards;
+      animation: floatUp 3s forwards;
+      text-shadow: 0px 0px 8px #ff66b2;
       pointer-events: none;
     }
     @keyframes floatUp {
@@ -42,190 +49,130 @@
       100% { opacity: 0; transform: translateY(-50px); }
     }
 
-    /* ===== Spinner ===== */
-    #spinner {
-      margin: 30px auto;
+    /* === Spinner === */
+    #spinner-container {
+      margin: 40px auto;
+      position: relative;
       width: 300px;
       height: 300px;
-      border-radius: 50%;
-      border: 10px solid #ff99cc;
-      position: relative;
-      overflow: hidden;
-      transition: transform 4s ease-out;
     }
-    .slice {
-      position: absolute;
-      width: 50%;
-      height: 50%;
-      background: #ff4d6d;
-      transform-origin: 100% 100%;
-      clip-path: polygon(0 0, 100% 0, 100% 100%);
+    #spinner {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      border: 8px solid #ff66b2;
       display: flex;
       align-items: center;
       justify-content: center;
-      color: #fff;
-      font-size: 0.8rem;
-      text-align: center;
-      padding: 10px;
-    }
-    .spin-btn {
-      margin-top: 20px;
-      padding: 12px 25px;
-      border: none;
-      border-radius: 30px;
-      background: #ff4d6d;
-      color: white;
-      font-size: 1rem;
+      font-size: 1.2em;
+      font-weight: bold;
+      background: radial-gradient(circle, #ffb3d9, #ff4da6);
       cursor: pointer;
+      transition: transform 3s ease-out;
     }
 
-    /* ===== Garden ===== */
-    .garden {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 15px;
+    /* === Love Garden === */
+    #garden {
+      margin: 40px auto;
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 20px;
+      max-width: 500px;
     }
     .flower {
-      font-size: 3rem;
+      font-size: 2em;
       cursor: pointer;
-      transition: transform 0.3s ease;
+      transition: transform 0.6s ease;
+      display: inline-block;
     }
-    .flower:hover { transform: scale(1.3); }
+    .flower.animate {
+      transform: scale(1.6) rotate(360deg);
+    }
+    .flower-note {
+      font-size: 0.9em;
+      margin-top: 5px;
+      color: #ff99cc;
+      display: none;
+      animation: fadeIn 1s ease;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
 
-    /* ===== Polaroid Wall ===== */
-    .polaroid-wall {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 20px;
-      padding: 20px;
+    /* === Polaroid Wall === */
+    #polaroid-wall {
+      margin: 50px auto;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      justify-content: center;
     }
     .polaroid {
-      background: #fff;
-      color: #000;
+      background: white;
+      color: black;
       padding: 10px;
       border-radius: 10px;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+      width: 150px;
+      box-shadow: 0px 4px 8px rgba(0,0,0,0.5);
       transform: rotate(-2deg);
-      transition: transform 0.3s;
     }
     .polaroid img {
       width: 100%;
       border-radius: 8px;
     }
-    .polaroid:hover {
-      transform: rotate(0deg) scale(1.05);
+    .caption {
+      margin-top: 5px;
+      font-size: 0.9em;
+      font-weight: bold;
+      color: #ff4da6;
+    }
+
+    /* === Music Button === */
+    #music-btn {
+      margin: 20px auto;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 20px;
+      background: #ff66b2;
+      color: white;
+      font-size: 1em;
+      cursor: pointer;
+      box-shadow: 0px 4px 8px rgba(0,0,0,0.5);
     }
   </style>
 </head>
 <body>
-  <h1>💖 For My Special Girl 💖</h1>
 
-  <!-- ===== Star Map ===== -->
-  <section>
-    <h2>🌌 Starry Love Notes</h2>
-    <canvas id="starCanvas" width="600" height="400"></canvas>
-  </section>
+  <h1>💖 For My Love 💖</h1>
 
-  <!-- ===== Love Spinner ===== -->
-  <section>
-    <h2>🎡 Love Spinner</h2>
-    <div id="spinner"></div>
-    <button class="spin-btn" onclick="spin()">Spin</button>
-  </section>
+  <!-- 🎵 Background Music -->
+  <audio id="bg-music" autoplay loop>
+    <source src="assets/maan.mp3" type="audio/mpeg">
+  </audio>
+  <button id="music-btn">⏸️ Pause Music</button>
 
-  <!-- ===== Love Garden ===== -->
-  <section>
-    <h2>🌸 Love Garden</h2>
-    <div class="garden" id="garden"></div>
-  </section>
+  <!-- 🌌 Stars -->
+  <div id="stars"></div>
 
-  <!-- ===== Polaroid Wall ===== -->
-  <section>
-    <h2>🖼️ Our Polaroid Wall</h2>
-    <div class="polaroid-wall">
-      <div class="polaroid"><img src="https://cdn.pixabay.com/photo/2017/01/20/00/30/romance-1997282_1280.jpg"><p>Forever Us ❤️</p></div>
-      <div class="polaroid"><img src="https://cdn.pixabay.com/photo/2021/01/18/20/55/bmw-5928686_1280.jpg"><p>BMW Dreams 🚘</p></div>
-      <div class="polaroid"><img src="https://cdn.pixabay.com/photo/2016/12/06/18/27/porsche-1888080_1280.jpg"><p>Porsche Passion 🏎️</p></div>
-      <div class="polaroid"><img src="https://cdn.pixabay.com/photo/2018/06/24/23/31/car-3499684_1280.jpg"><p>Pagani Beauty 💎</p></div>
-      <div class="polaroid"><img src="https://cdn.pixabay.com/photo/2015/09/02/12/26/lamborghini-918139_1280.jpg"><p>Lamborghini Love 🔥</p></div>
-      <div class="polaroid"><img src="https://cdn.pixabay.com/photo/2017/04/21/22/35/ferrari-2255161_1280.jpg"><p>Ferrari Fever ❤️‍🔥</p></div>
-    </div>
-  </section>
+  <!-- 🎡 Spinner -->
+  <div id="spinner-container">
+    <div id="spinner">Click to Spin 🎡</div>
+  </div>
 
-  <!-- ===== Music ===== -->
-  <section>
-    <h2>🎶 Our Song</h2>
-    <audio id="bgMusic" controls autoplay loop>
-      <source src="https://pagalfree.com/musics/128-Maan%20Meri%20Jaan%20-%20Champagne%20Talk-320Kbps.mp3" type="audio/mp3">
-    </audio>
-  </section>
+  <!-- 🌸 Love Garden -->
+  <div id="garden"></div>
+
+  <!-- 📸 Polaroid Wall -->
+  <div id="polaroid-wall"></div>
 
   <script>
-    /* ===== Stars (100 cheesy notes with floating bubbles) ===== */
-    const starNotes = [
-      "You’re my favorite place to be ❤️","Every star is jealous of your sparkle ✨","You’re the reason I smile every day 😊",
-      "My heart races faster than a Ferrari when I see you 🏎️💓","Forever isn’t enough with you 💞","You’re the missing piece to my puzzle 🧩❤️",
-      "Your laugh is music to my soul 🎶","You light up my darkest nights 🌙✨","Holding your hand feels like home 🏡💖",
-      "You’re the best part of my mornings ☀️","With you, even Mondays feel magical ✨","You’re sweeter than chocolate 🍫💘",
-      "You’re my lucky charm 🍀❤️","I’d choose you in every lifetime 🌎💞","You make my world bloom 🌸","Your voice is my favorite melody 🎤🎶",
-      "You’re my forever and always ♾️❤️","My dreams are brighter with you in them 🌌","You’re more precious than diamonds 💎💖",
-      "Every heartbeat whispers your name 💓","I fall for you more every day 🌹","You’re the sunshine to my storms ⛈️☀️",
-      "My love grows like a garden with you 🌷","You’re the calm in my chaos 🌊❤️","Life with you is my favorite adventure 🚀💞",
-      "You’re the sweetest addiction I’ll never quit 🍯💘","Your eyes outshine the stars ✨😍","You make my soul dance 💃🕺",
-      "You’re my safe place, always 🛡️❤️","You’re my best ‘what if’ come true 🌈","I’d pause time just to stay with you ⏳💖",
-      "You’re my once-in-a-lifetime 🌟","You make even silence beautiful 🤍","I’d write your name across the sky 🌌",
-      "You’re my favorite hello and hardest goodbye 💌","Your hugs are my favorite therapy 🤗❤️","You’re the dream I never want to wake up from 🌙",
-      "You’re my heartbeat in human form 💓","I’m addicted to your smile 😍","You make forever feel too short ⏳💞",
-      "You’re the poetry in my chaos ✍️❤️","Your love is my favorite gift 🎁💘","You’re the angel I didn’t know I needed 😇",
-      "Every kiss feels like magic ✨💋","I’d cross galaxies just for you 🌌🚀","You’re my favorite story to tell 📖❤️",
-      "Your love is my greatest treasure 💎💞","You’re my heart’s permanent resident 🏡💓","You’re my firework on the darkest nights 🎆",
-      "My soul belongs to you 🌹❤️","You’re the reason love songs make sense 🎶💞","You’re my morning coffee and midnight dream ☕🌙",
-      "I love you more than Wi-Fi 😜❤️","You make the stars jealous 🌟💖","You’re my personal miracle ✨","With you, I’m home 🏡❤️",
-      "You’re my happily ever after 📖💞","Your love is my compass 🧭❤️","You make my world spin 🌍💘","You’re my partner-in-crime forever 🔐",
-      "My favorite chapter is us 📚❤️","Your smile is my sunrise 🌅💞","You’re my sweetest daydream ☁️💓","You’re my lucky penny 🍀❤️",
-      "You’re the rainbow to my rain 🌈💘","You’re my forever muse 🎨❤️","I could live in your hugs forever 🤗💞","You’re my shooting star 🌠❤️",
-      "My love multiplies with every heartbeat 💓","You’re my safe harbor ⚓💞","Your love is my melody 🎶❤️","You’re the fire in my soul 🔥💖",
-      "You’re my endless summer 🌞❤️","You’re my constant in every equation ➕➗","You make my heart bloom 🌺💞","You’re my lighthouse in the dark 🌌❤️",
-      "Every glance feels like magic ✨💘","You’re my favorite distraction 🥰","Your love is my fairy tale 📖❤️","You’re the spark in my forever 🔥💞",
-      "You’re the reason I believe in love 💖","I’d rewrite the stars for you ✨","You’re my sweetest melody 🎼❤️","You’re the light in my tunnel 💡💞",
-      "You’re my love story worth telling 📚💓","You’re my greatest adventure 🌍❤️","You make my soul shine ☀️💘","You’re my reason to keep dreaming 🌙❤️",
-      "You’re the blush in my cheeks 🌸💞","Your love is my masterpiece 🎨❤️","You’re my forever flame 🔥💓","You’re the echo of my heart 💖",
-      "You make me believe in magic ✨","You’re my heartbeat’s favorite rhythm 💓","You’re my sweetest escape 🌹❤️","I’d travel eternity with you 🚀♾️",
-      "You’re my miracle wrapped in love 🎁💞","Your love is my destiny 🌌❤️","You’re my ‘always’ and ‘forever’ 💖","You’re the ink to my love story ✍️❤️",
-      "You’re my heaven on earth 🌎💞","You’re my star that never fades ✨❤️"
-    ];
-    const canvas = document.getElementById("starCanvas");
-    const ctx = canvas.getContext("2d");
-    let stars = [];
-    for (let i = 0; i < 100; i++) {
-      stars.push({ x: Math.random() * canvas.width, y: Math.random() * canvas.height });
-    }
-    function drawStars() {
-      ctx.clearRect(0,0,canvas.width,canvas.height);
-      ctx.fillStyle = "white";
-      stars.forEach(st => {
-        ctx.beginPath();
-        ctx.arc(st.x, st.y, 2, 0, Math.PI*2);
-        ctx.fill();
-      });
-    }
-    drawStars();
-    canvas.addEventListener("click", e => {
-      let s = stars.find(st => Math.hypot(st.x - e.offsetX, st.y - e.offsetY) < 10);
-      if (s) {
-        const note = starNotes[Math.floor(Math.random()*starNotes.length)];
-        const div = document.createElement("div");
-        div.className = "floatingNote";
-        div.style.left = (e.pageX - 40) + "px";
-        div.style.top = (e.pageY - 20) + "px";
-        div.textContent = note;
-        document.body.appendChild(div);
-        setTimeout(() => div.remove(), 2000);
-      }
-    });
+    // === 100 Star Messages ===
+    const starNotes = Array.from({length: 100}, (_, i) =>
+      `⭐ You are my reason #${i+1} to smile every day ❤️`
+    );
 
-    /* ===== Spinner (20 slices) ===== */
+    // === Spinner Messages (20 romantic lines) ===
     const spinnerMessages = [
       "You’re my forever 🌹","Your smile is my sunshine ☀️","With you, I’m the best me 💪❤️",
       "You light up my world ✨","Holding your hand feels like home 🏡💞","You make my heart race 🏎️❤️",
@@ -235,41 +182,101 @@
       "Together, we’re unstoppable 🔥","I’m proud of you always 🌟","My love for you is endless ♾️",
       "You’re my treasure chest 💎❤️","Life with you is the real luxury 💝"
     ];
-    const spinner = document.getElementById("spinner");
-    spinnerMessages.forEach((msg, i) => {
-      let slice = document.createElement("div");
-      slice.className = "slice";
-      slice.style.transform = `rotate(${i * (360/spinnerMessages.length)}deg) skewY(${90 - (360/spinnerMessages.length)}deg)`;
-      slice.textContent = msg;
-      spinner.appendChild(slice);
-    });
-    let spinning = false;
-    function spin() {
-      if (spinning) return;
-      spinning = true;
-      const spinDeg = 360 * 5 + Math.floor(Math.random()*360);
-      spinner.style.transform = `rotate(${spinDeg}deg)`;
-      setTimeout(()=> spinning=false, 4000);
+
+    // === Create Stars ===
+    const starsContainer = document.getElementById("stars");
+    for (let i = 0; i < 100; i++) {
+      const star = document.createElement("div");
+      star.className = "star";
+      star.style.top = `${Math.random() * 100}vh`;
+      star.style.left = `${Math.random() * 100}vw`;
+
+      star.addEventListener("click", () => {
+        const note = document.createElement("div");
+        note.className = "floating-note";
+        note.style.top = star.style.top;
+        note.style.left = star.style.left;
+        note.textContent = starNotes[i];
+        starsContainer.appendChild(note);
+        setTimeout(() => note.remove(), 3000);
+      });
+
+      starsContainer.appendChild(star);
     }
 
-    /* ===== Love Garden ===== */
+    // === Spinner Logic ===
+    const spinner = document.getElementById("spinner");
+    const spinnerContainer = document.getElementById("spinner-container");
+
+    spinner.addEventListener("click", () => {
+      const randomDeg = 3600 + Math.floor(Math.random() * 360);
+      spinner.style.transform = `rotate(${randomDeg}deg)`;
+
+      setTimeout(() => {
+        const msg = spinnerMessages[Math.floor(Math.random() * spinnerMessages.length)];
+        const note = document.createElement("div");
+        note.className = "floating-note";
+        note.style.top = "50%";
+        note.style.left = "50%";
+        note.style.transform = "translate(-50%, -50%)";
+        note.textContent = "🎡 " + msg;
+        spinnerContainer.appendChild(note);
+        setTimeout(() => note.remove(), 3000);
+      }, 3000);
+    });
+
+    // === Garden with animation ===
     const garden = document.getElementById("garden");
-    const gardenNotes = [
-      "🌸 You make my soul bloom ❤️","🌹 My love grows for you every day 💖",
-      "🌼 You are my sunshine ☀️","🌺 Forever my flower of joy 🌸",
-      "🌻 My heart follows your light 💞","🌷 You color my life 🌈",
-      "💐 You’re my bouquet of happiness 😍","🌱 With you, love grows stronger 🌹",
-      "🌸 I’m rooted in your heart 💘","🌹 Our love blossoms eternally ✨"
+    const flowers = ["🌹","🌸","🌼","🌻","💐","🌷","🌺","🥀","🪷","🌱"];
+    flowers.forEach((flower, i) => {
+      const flowerDiv = document.createElement("div");
+      flowerDiv.innerHTML = `<div class="flower">${flower}</div><div class="flower-note">You make me bloom with love #${i+1} 💖</div>`;
+      
+      const flowerEl = flowerDiv.querySelector(".flower");
+      const note = flowerDiv.querySelector(".flower-note");
+
+      flowerEl.addEventListener("click", () => {
+        flowerEl.classList.add("animate");
+        setTimeout(() => flowerEl.classList.remove("animate"), 600);
+        note.style.display = note.style.display === "block" ? "none" : "block";
+      });
+
+      garden.appendChild(flowerDiv);
+    });
+
+    // === Polaroid Wall ===
+    const polaroidWall = document.getElementById("polaroid-wall");
+    const carImages = [
+      {src:"https://upload.wikimedia.org/wikipedia/commons/4/44/BMW.svg",caption:"BMW Love 💙"},
+      {src:"https://upload.wikimedia.org/wikipedia/commons/9/9d/Porsche_logo.svg",caption:"Porsche Passion 🖤"},
+      {src:"https://upload.wikimedia.org/wikipedia/commons/d/d3/Lamborghini_Logo.svg",caption:"Lambo Dreams 💛"},
+      {src:"https://upload.wikimedia.org/wikipedia/en/0/0d/Ferrari-Logo.svg",caption:"Ferrari Fire ❤️"},
+      {src:"https://upload.wikimedia.org/wikipedia/commons/8/88/Pagani_Logo.svg",caption:"Pagani Magic 💫"},
+      {src:"https://upload.wikimedia.org/wikipedia/commons/d/d2/Koenigsegg_logo.svg",caption:"Koenigsegg Power 🔥"}
     ];
-    gardenNotes.forEach(note => {
-      let f = document.createElement("div");
-      f.className = "flower";
-      f.textContent = "🌸";
-      f.onclick = () => alert(note);
-      garden.appendChild(f);
+    carImages.forEach(car => {
+      const polaroid = document.createElement("div");
+      polaroid.className = "polaroid";
+      polaroid.innerHTML = `<img src="${car.src}" alt="car"><div class="caption">${car.caption}</div>`;
+      polaroidWall.appendChild(polaroid);
+    });
+
+    // === Music Button ===
+    const music = document.getElementById("bg-music");
+    const musicBtn = document.getElementById("music-btn");
+    musicBtn.addEventListener("click", () => {
+      if (music.paused) {
+        music.play();
+        musicBtn.textContent = "⏸️ Pause Music";
+      } else {
+        music.pause();
+        musicBtn.textContent = "▶️ Play Music";
+      }
     });
   </script>
 </body>
 </html>
+
+
 
 
