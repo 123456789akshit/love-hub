@@ -5,16 +5,20 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>My Romantic Hub</title>
 <style>
+/* General Styles */
 body, html {margin:0; padding:0; overflow:hidden; font-family:'Poppins', sans-serif; background:#000; color:white;}
 canvas#stars {position:fixed; top:0; left:0; z-index:-1;}
 .menu {position:fixed; top:10px; left:50%; transform:translateX(-50%); display:flex; gap:10px; flex-wrap:wrap;}
 .menu button {padding:10px 20px; border:none; border-radius:10px; cursor:pointer; background:#ff69b4; color:white; font-weight:bold; transition:0.3s;}
 .menu button:hover{background:#ff85c1;}
+/* Spinner Styles */
 #spinnerCanvas {display:block; margin:100px auto;}
 #spinnerMessage {text-align:center; margin-top:20px; font-size:1.2em;}
+/* Garden */
 .garden {position:fixed; bottom:20px; left:50%; transform:translateX(-50%); display:flex; gap:20px;}
 .flower {font-size:40px; cursor:pointer; transition:transform 0.3s;}
 .flower:hover{transform:scale(1.3);}
+/* Polaroid Wall */
 .polaroid-wall {position:fixed; right:10px; top:80px; display:flex; flex-direction:column; gap:10px;}
 .polaroid {width:80px; height:80px; background:#fff; color:#000; display:flex; align-items:center; justify-content:center; cursor:pointer; perspective:600px;}
 .polaroid-inner {width:100%; height:100%; transition:transform 0.6s; transform-style:preserve-3d; position:relative;}
@@ -22,8 +26,12 @@ canvas#stars {position:fixed; top:0; left:0; z-index:-1;}
 .polaroid-front, .polaroid-back {position:absolute; width:100%; height:100%; backface-visibility:hidden; display:flex; align-items:center; justify-content:center; text-align:center; padding:5px; border-radius:5px;}
 .polaroid-front{background:#fff;}
 .polaroid-back{background:#ff69b4; color:white; transform:rotateY(180deg); font-size:0.8em;}
+/* Treasure Hunt */
 #treasure {position:fixed; left:10px; bottom:10px; background:#ff69b4; color:white; padding:10px; border-radius:10px; cursor:pointer;}
+#riddleArea {position:fixed; top:50px; left:50%; transform:translateX(-50%); background:#222; color:#ff69b4; padding:15px; border-radius:10px; display:none; text-align:center; width:300px;}
+/* Secret Code */
 #secretMessage {position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); font-size:2em; display:none; color:#ff69b4; text-align:center;}
+/* Cursor Hearts */
 .cursor-heart {position:absolute; font-size:20px; pointer-events:none; animation:floatUp 2s forwards;}
 @keyframes floatUp {0%{opacity:1; transform:translateY(0);}100%{opacity:0; transform:translateY(-100px);}}
 </style>
@@ -36,14 +44,20 @@ canvas#stars {position:fixed; top:0; left:0; z-index:-1;}
 <button onclick="openSection('polaroid')">🖼️ Polaroid</button>
 <button onclick="openSection('treasure')">🗝️ Treasure Hunt</button>
 </div>
+<!-- Spinner -->
 <canvas id="spinnerCanvas" width="400" height="400"></canvas>
 <div id="spinnerMessage"></div>
+<!-- Garden -->
 <div class="garden" id="garden"></div>
+<!-- Polaroid Wall -->
 <div class="polaroid-wall" id="polaroidWall"></div>
+<!-- Treasure Hunt -->
 <div id="treasure">Solve Riddles!</div>
+<div id="riddleArea"></div>
+<!-- Secret Code -->
 <div id="secretMessage">❤️ You’re My Treasure! ❤️</div>
 <script>
-/* Cursor Hearts */
+// Cursor Hearts
 document.addEventListener('mousemove', function(e){
   const heart = document.createElement('div');
   heart.className='cursor-heart';
@@ -53,30 +67,44 @@ document.addEventListener('mousemove', function(e){
   document.body.appendChild(heart);
   setTimeout(()=>heart.remove(),2000);
 });
-/* Stars */
+
+// Stars
 const canvas = document.getElementById('stars');
 const ctx = canvas.getContext('2d');
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 let stars=[];
-const starMsgs = [
-"You're my sunshine 💖","Every moment with you is magic ✨","My heart beats for you ❤️","You light up my world 🌟","Forever yours 💕","You are my dream come true 😘",
-"With you, life is beautiful 🌹","My soulmate 💝","You make me smile every day 😍","You’re my universe 🌌","I cherish you always 💘","You are my happiness 🌸","Love you endlessly 💓","You’re my heartbeat ❤️","Every day is better with you 💖",
-"You’re my everything 💞","You complete me 💗","My love for you is infinite ♾️","You’re my favorite hello and hardest goodbye 💝","You’re my treasure 💎","My heart is yours 💘","You are my joy 🌷","You make life sweeter 🍬",
-"Forever and always with you 💕","You’re my star ⭐","I love you more than words ❤️","With you, I feel home 🏡","My heart smiles because of you 😊","You’re my melody 🎶","Every moment matters with you 💖","I adore you 😍",
-"You make me feel alive 🌟","You’re my lucky charm 🍀","My sweet angel 😘","You’re my desire 🔥","I can’t imagine life without you 💝","You’re my rainbow 🌈","You’re my light in darkness 🌌","You’re my dream 💭",
-"Forever enchanted by you ✨","My love grows every day 🌹","You’re my magic potion 💖","I fall for you more ❤️","You’re my inspiration 🌸","My heart is happy with you 💘","You make me blush 😳","You’re my butterfly 🦋","With you, love is endless 💕",
-"You’re my honey bee 🐝","You’re my heartbeat 💓","I love your smile 😊","You make my soul sing 🎵","You’re my cozy blanket 🛌","I’m addicted to you 😍","You’re my muse 🎨","My heart races for you 💖","You make me feel special 💘",
-"You’re my cuddle bear 🐻","I love our memories 🥰","You’re my dream girl 💝","You make me laugh 😄","I can’t stop thinking of you 💕","You’re my secret smile 😏","My heart is full because of you 💖","You’re my passion 🔥",
-"You’re my spark ⚡","I cherish every second ⏳","You’re my heartbeat rhythm 🎶","I’m yours completely 💝","You’re my rose 🌹","My love blossoms for you 🌸","You’re my cozy corner 🛋️","You’re my favorite thought 💘","You’re my favorite hello 💖",
-"You’re my endless love ♾️","You make life colorful 🎨","I adore your laugh 😍","You’re my favorite dream 💭","I’m enchanted by you ✨","You make my heart flutter ❤️","You’re my happy place 🏖️","You’re my sunshine smile 🌞","You’re my treasure chest 💎",
-"You’re my sparkly star ✨","You’re my love story 📖","You’re my serenade 🎵","You’re my heartbeat song 💓","I’m captivated by you 😘","You’re my favorite moment 🕰️","You make me feel magical 🌟","You’re my cherry 🍒","You’re my cupcake 🧁",
-"You’re my magic ✨","You’re my affection 💖","You’re my joy 🌷","You’re my heartbeat melody 🎶","You’re my dream come true 💘","You’re my cuddle 😍","You’re my inspiration 🌸","You’re my sweet love 💝","You’re my heart & soul ❤️",
-"You’re my glow 🌟","You’re my honey 🍯","You’re my starlight ✨","You’re my delight 😘","You’re my cuddlebug 🐞","You’re my sweetness 🍬","You’re my magic touch 💖","You’re my angel 😇"
+const starMessages=[
+  "You light up my world ✨","My heart beats for you ❤️","Forever yours 💕","My sweetest love 💖","You’re magical ✨","With you everything is brighter 🌟","You complete me 💘",
+  "Every moment with you is special 💝","I love you more each day 💖","You make life beautiful 🌹",
+  "My sunshine 🌞","You’re my angel 😇","Love you endlessly 💕","You’re my dream come true 💖","Heart skips for you 💘",
+  "You’re my happiness 🌸","You’re my everything 💖","I adore you 😘","You’re my soulmate 💝","You’re perfect 💕",
+  "I’m lost without you ❤️","You make me smile every day 😄","My heartbeat is yours 💓","You’re my star ⭐","Love you infinitely 💖",
+  "You’re my moon 🌙","You make me blush 😳","Forever mine 💕","I cherish you 💖","You’re my paradise 🌴",
+  "You’re my queen 👑","You’re my treasure 💎","You make my heart flutter 💘","You’re my sweetheart 💝","You light my life 🔥",
+  "You’re my lovebird 🐦","You’re my rose 🌹","You’re my muse 🎨","My world is brighter 🌟","You’re my heartbeat 💓",
+  "You’re my angelic star 🌟","Love you to the moon 🌙","You make my heart smile 😊","You’re my forever 💖","My darling 💕",
+  "You’re my charm ✨","You make me happy 😍","You’re my honey 🍯","You’re my cuddlebug 🐻","You’re my cupcake 🧁",
+  "You’re my light 💡","I melt for you 🥰","You’re my heartthrob 💘","You’re my joy 💖","You’re my delight 💝",
+  "You make my world brighter 🌈","You’re my magic potion 🧪","My love grows for you 💕","You’re my starry night 🌌","You make life sweet 🍭",
+  "You’re my gem 💎","You’re my rainbow 🌈","You’re my heartbeat 💓","I treasure you 🥰","You’re my one & only 💖",
+  "I’m crazy for you 😘","You’re my forevermore 💕","Love you to bits 💝","You make life shine ✨","You’re my spark 💖",
+  "You’re my angel eyes 😇","My heart is yours 💓","You’re my darling 💕","You make me swoon 😍","I’m head over heels 💖",
+  "You’re my lovebug 🐞","You’re my peach 🍑","I’m enchanted by you ✨","You’re my honeybee 🐝","You make me melt 🥰",
+  "You’re my sweetheart pie 🥧","You’re my shining star ⭐","I adore you endlessly 💖","You’re my precious 💎","You complete me 💘",
+  "I’m yours forever 💝","You’re my moonlight 🌙","You make me giggle 😄","I’m captivated by you 💖","You’re my heartbeat 💓",
+  "You’re my rosebud 🌹","You’re my darling angel 😇","I love you madly 💕","You’re my cuddle love 🐻","You make life magical ✨"
 ];
+
 for(let i=0;i<100;i++){
-  stars.push({x:Math.random()*canvas.width, y:Math.random()*canvas.height, r:Math.random()*2+1, msg:starMsgs[i]});
+  stars.push({
+    x:Math.random()*canvas.width, 
+    y:Math.random()*canvas.height, 
+    r:Math.random()*2+1, 
+    msg: starMessages[i%starMessages.length]
+  });
 }
+
 function drawStars(){
   ctx.clearRect(0,0,canvas.width,canvas.height);
   for(let s of stars){
@@ -86,11 +114,13 @@ function drawStars(){
     ctx.fill();
   }
 }
+
 function twinkle(){
   for(let s of stars){
     s.r = Math.random()*2+1;
   }
 }
+
 canvas.addEventListener('click',function(e){
   for(let s of stars){
     if(Math.hypot(e.clientX-s.x,e.clientY-s.y)<10){
@@ -102,18 +132,20 @@ canvas.addEventListener('click',function(e){
       msg.style.fontWeight='bold';
       msg.textContent=s.msg;
       document.body.appendChild(msg);
-      setTimeout(()=>msg.remove(),2000);
+      setTimeout(()=>msg.remove(),2500);
     }
   }
 });
+
 setInterval(()=>{drawStars();twinkle();},200);
 
-/* Spinner */
+// Spinner
 const spinnerCanvas = document.getElementById('spinnerCanvas');
 const spinnerCtx = spinnerCanvas.getContext('2d');
 const spinnerMsgs = ["You’re My Sunshine 🌞","Forever Mine 💖","Love You More 😘","My Heart Beats for You ❤️","You’re Magical ✨","My Everything 💕","You’re the One 💘","Can’t Live Without You 💝"];
 const numSeg = spinnerMsgs.length;
 let angle = 0;
+
 function drawWheel(){
   const centerX=200,centerY=200,radius=150;
   spinnerCtx.clearRect(0,0,400,400);
@@ -123,17 +155,20 @@ function drawWheel(){
     spinnerCtx.arc(centerX,centerY,radius,i*2*Math.PI/numSeg,(i+1)*2*Math.PI/numSeg);
     spinnerCtx.fillStyle=i%2===0?'#ff69b4':'#ff85c1';
     spinnerCtx.fill();
+    // Draw text inside the segment
     spinnerCtx.save();
     spinnerCtx.translate(centerX,centerY);
     spinnerCtx.rotate((i+0.5)*2*Math.PI/numSeg);
     spinnerCtx.fillStyle='white';
     spinnerCtx.textAlign='right';
     spinnerCtx.font='14px Poppins';
-    spinnerCtx.fillText(spinnerMsgs[i],radius-10,5);
+    spinnerCtx.fillText(spinnerMsgs[i],radius-20,5);
     spinnerCtx.restore();
   }
 }
+
 drawWheel();
+
 spinnerCanvas.addEventListener('click',function(){
   let spins = Math.random()*10+10;
   let current=0;
@@ -149,7 +184,7 @@ spinnerCanvas.addEventListener('click',function(){
   },20);
 });
 
-/* Garden */
+// Garden
 const garden = document.getElementById('garden');
 const flowerMsgs = ["🌸 You’re Beautiful 💖","🌹 My Love 💕","🌺 Sweetheart 😘","💐 My Angel ✨","🌷 Always Mine 💝","🌻 Sunshine 🌞","🥀 Forever 💘","🌼 Magic ✨","🌹 Heartbeat ❤️","🌸 Soulmate 💖"];
 for(let i=0;i<10;i++){
@@ -161,7 +196,7 @@ for(let i=0;i<10;i++){
     const msg=document.createElement('div');
     msg.style.position='absolute';
     msg.style.left=(this.offsetLeft)+'px';
-    msg.style.bottom='120px';
+    msg.style.bottom='80px';
     msg.style.color='#ff69b4';
     msg.style.fontWeight='bold';
     msg.textContent=this.dataset.msg;
@@ -171,7 +206,7 @@ for(let i=0;i<10;i++){
   garden.appendChild(flower);
 }
 
-/* Polaroid Wall */
+// Polaroid Wall
 const polaroidWall = document.getElementById('polaroidWall');
 const carEmojis = ['🚗','🏎️','🚘','🚙','🚖','🚔','🚓','🚕','🚐','🚛'];
 const cheesyLines = ["My Ride or Die 💖","Zoom into My Heart 💕","Speeding with Love ❤️","My Sweet Vroom Vroom 💘","Fast & Forever 💝","You Drive Me Crazy 😘","My Passion 🚀","Full Throttle Love 💖","You’re My Engine 💓","Fast Lane to Heart ❤️"];
@@ -182,21 +217,31 @@ for(let i=0;i<10;i++){
   polaroidWall.appendChild(card);
 }
 
-/* Treasure Hunt */
+// Treasure Hunt
+const riddles=[
+  {q:"I have keys but no locks, I have space but no rooms. What am I?",a:"KEYBOARD"},
+  {q:"What has a heart that doesn’t beat?",a:"ARTICHOKE"},
+  {q:"What can travel around the world while staying in a corner?",a:"STAMP"}
+];
+
 document.getElementById('treasure').addEventListener('click',function(){
-  let answer1 = prompt("Riddle 1: I have keys but no locks, I have space but no rooms. What am I?");
-  if(answer1 && answer1.toLowerCase()==='keyboard'){
-    let answer2 = prompt("Riddle 2: What has a heart that doesn’t beat?");
-    if(answer2 && answer2.toLowerCase()==='artichoke'){
-      let answer3 = prompt("Riddle 3: What can travel around the world while staying in a corner?");
-      if(answer3 && answer3.toLowerCase()==='stamp'){
-        alert('❤️ Congratulations! You found my treasure! ❤️');
-      } else alert('Wrong answer! Try again.');
-    } else alert('Wrong answer! Try again.');
-  } else alert('Wrong answer! Try again.');
+  const riddleArea=document.getElementById('riddleArea');
+  let idx=0;
+  riddleArea.style.display='block';
+  riddleArea.innerHTML=`${riddles[idx].q}<br><input type="text" id="answer"/><button onclick="checkAnswer(${idx})">Submit</button>`;
 });
 
-/* Secret Code */
+window.checkAnswer=function(idx){
+  const ans=document.getElementById('answer').value.toUpperCase();
+  const riddleArea=document.getElementById('riddleArea');
+  if(ans===riddles[idx].a){
+    riddleArea.innerHTML="❤️ Correct! Here's your heart 💖";
+  }else{
+    riddleArea.innerHTML="❌ Try Again!<br>"+riddles[idx].q+`<br><input type="text" id="answer"/><button onclick="checkAnswer(${idx})">Submit</button>`;
+  }
+}
+
+// Secret Code
 document.addEventListener('keydown',function(e){
   window.code=window.code||'';
   window.code+=e.key.toUpperCase();
@@ -208,7 +253,7 @@ document.addEventListener('keydown',function(e){
   }
 });
 
-/* Section Toggle */
+// Section Toggle
 function openSection(section){
   if(section==='spinner'){spinnerCanvas.style.display='block'; document.getElementById('spinnerMessage').style.display='block';}
   else{spinnerCanvas.style.display='none'; document.getElementById('spinnerMessage').style.display='none';}
@@ -216,15 +261,9 @@ function openSection(section){
   if(section==='polaroid') polaroidWall.style.display='flex'; else polaroidWall.style.display='none';
 }
 
-/* Initial Hide */
+// Initial Hide
 garden.style.display='none'; polaroidWall.style.display='none'; spinnerCanvas.style.display='none'; document.getElementById('spinnerMessage').style.display='none';
 </script>
 </body>
 </html>
-
-
-
-
-
-
 
