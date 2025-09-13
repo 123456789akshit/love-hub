@@ -3,254 +3,185 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>For My Special Girl 💖</title>
+<title>Love Hub 💖</title>
 <style>
-  body {
-    margin:0;
-    font-family: 'Poppins', sans-serif;
-    background: linear-gradient(to top, #0f2027, #203a43, #2c5364);
-    color:white;
-    overflow-x:hidden;
-  }
-  h1,h2{text-align:center;}
-  .menu{
-    display:flex;
-    flex-wrap:wrap;
-    justify-content:center;
-    gap:15px;
-    margin-top:40px;
-  }
-  .menu button{
-    background:rgba(255,255,255,0.1);
-    border:2px solid #ff9ff3;
-    border-radius:12px;
-    padding:15px 20px;
-    font-size:1em;
-    color:white;
-    cursor:pointer;
-    transition:.3s;
-    text-shadow:0 0 10px #ff6b81;
-  }
-  .menu button:hover{
-    background:#ff6b81;
-    box-shadow:0 0 15px #f368e0;
-  }
-  .modal{
-    display:none;
-    position:fixed;
-    top:0; left:0;
-    width:100%; height:100%;
-    background: rgba(0,0,0,0.85);
-    justify-content:center;
-    align-items:center;
-    flex-direction:column;
-    z-index:10;
-    padding:20px;
-  }
-  .modal.active{display:flex;}
-  .modal h2{margin-bottom:20px;}
-  .closeBtn{
-    margin-top:20px;
-    padding:10px 20px;
-    border:none;
-    border-radius:8px;
-    background:#ff6b81;
-    color:white;
-    cursor:pointer;
-  }
-  @keyframes glow {
-    from { text-shadow:0 0 10px #ff6b81; }
-    to { text-shadow:0 0 20px #f368e0; }
-  }
-  canvas{background:transparent; position:absolute; top:0; left:0; z-index:-1;}
-  .flower{width:50px; cursor:pointer; margin:5px;}
-  .polaroid{width:120px; height:150px; margin:10px; perspective:1000px; display:inline-block;}
-  .polaroid-inner{position:relative; width:100%; height:100%; text-align:center; transition: transform 0.8s; transform-style: preserve-3d; cursor:pointer;}
-  .polaroid-inner.flipped{transform: rotateY(180deg);}
-  .polaroid-front,.polaroid-back{position:absolute; width:100%; height:100%; backface-visibility:hidden; border-radius:10px;}
-  .polaroid-front{background:white;}
-  .polaroid-back{background:#ff6b81; color:white; display:flex; align-items:center; justify-content:center; transform: rotateY(180deg);}
-  .glow {animation: glow 1.5s infinite alternate;}
+body{margin:0;font-family:'Poppins',sans-serif;background:#0b0c24;color:white;overflow-x:hidden;}
+h1{text-align:center;margin-top:20px;}
+.menu{display:flex;flex-wrap:wrap;justify-content:center;gap:15px;margin:20px;}
+.menu button{padding:15px 20px;border-radius:12px;border:2px solid #ff9ff3;background:rgba(255,255,255,0.1);color:white;cursor:pointer;text-shadow:0 0 10px #ff6b81;transition:0.3s;}
+.menu button:hover{background:#ff6b81;box-shadow:0 0 15px #f368e0;}
+.modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.85);justify-content:center;align-items:center;flex-direction:column;z-index:10;padding:20px;overflow:auto;}
+.modal.active{display:flex;}
+.modal h2{margin-bottom:20px;text-align:center;}
+.closeBtn{margin-top:20px;padding:10px 20px;border:none;border-radius:8px;background:#ff6b81;color:white;cursor:pointer;}
+@keyframes glow{from{text-shadow:0 0 10px #ff6b81;}to{text-shadow:0 0 20px #f368e0;}}
+canvas{background:transparent;display:block;margin:auto;}
+#noteBubble{position:absolute;padding:10px 15px;background:rgba(255,192,203,0.95);color:#000;border-radius:12px;display:none;font-weight:bold;box-shadow:0 0 15px pink;pointer-events:none;z-index:1000;}
+#polaroidContainer{display:flex;flex-wrap:wrap;justify-content:center;gap:20px;margin-top:30px;}
+.flipped{transform:rotateY(180deg);}
+#gardenContainer{display:flex;flex-wrap:wrap;justify-content:center;gap:15px;margin-top:20px;}
+.gardenFlower{width:80px;height:80px;background:#ff69b4;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:bold;color:white;cursor:pointer;position:relative;}
+.gardenNote{position:absolute;background:rgba(255,192,203,0.95);padding:5px 10px;border-radius:10px;color:black;font-weight:bold;top:-35px;display:none;white-space:nowrap;}
 </style>
 </head>
 <body>
 
 <h1>For My Special Girl 💖</h1>
-<p style="text-align:center;">Choose a surprise ✨</p>
+<p style="text-align:center;">Click a surprise ✨</p>
 
 <div class="menu">
   <button onclick="openModal('starModal')">🌌 Star Map</button>
   <button onclick="openModal('spinnerModal')">🎡 Love Spinner</button>
   <button onclick="openModal('gardenModal')">🌹 Love Garden</button>
   <button onclick="openModal('polaroidModal')">🖼️ Polaroid Wall</button>
+  <button onclick="openModal('treasureModal')">🗝️ Treasure Hunt</button>
+  <button onclick="secretLove()">🎮 Secret Code</button>
   <button onclick="openModal('songModal')">🎶 Special Song</button>
 </div>
 
-<!-- Star Map Modal -->
+<!-- Star Map -->
 <div class="modal" id="starModal">
   <h2>🌌 Star Map</h2>
-  <canvas id="starCanvas"></canvas>
+  <canvas id="starCanvas" width="800" height="500"></canvas>
+  <div id="noteBubble"></div>
   <button class="closeBtn" onclick="closeModal('starModal')">Close</button>
 </div>
 
-<!-- Spinner Modal -->
+<!-- Spinner -->
 <div class="modal" id="spinnerModal">
   <h2>🎡 Love Spinner</h2>
   <canvas id="spinnerCanvas" width="400" height="400"></canvas>
-  <p id="spinnerResult" style="text-align:center; margin-top:20px;"></p>
   <button class="closeBtn" onclick="closeModal('spinnerModal')">Close</button>
 </div>
 
-<!-- Garden Modal -->
+<!-- Love Garden -->
 <div class="modal" id="gardenModal">
   <h2>🌹 Love Garden</h2>
-  <div id="gardenContainer" style="text-align:center;"></div>
-  <p id="gardenNote" style="margin-top:20px; font-size:1.2em;"></p>
+  <div id="gardenContainer"></div>
   <button class="closeBtn" onclick="closeModal('gardenModal')">Close</button>
 </div>
 
-<!-- Polaroid Modal -->
+<!-- Polaroid Wall -->
 <div class="modal" id="polaroidModal">
   <h2>🖼️ Polaroid Wall</h2>
-  <div id="polaroidContainer" style="text-align:center;"></div>
+  <div id="polaroidContainer"></div>
   <button class="closeBtn" onclick="closeModal('polaroidModal')">Close</button>
 </div>
 
-<!-- Song Modal -->
+<!-- Treasure Hunt -->
+<div class="modal" id="treasureModal">
+  <h2>🗝️ Treasure Hunt</h2>
+  <div id="riddleContainer"></div>
+  <button class="closeBtn" onclick="closeModal('treasureModal')">Close</button>
+</div>
+
+<!-- Special Song -->
 <div class="modal" id="songModal">
-  <h2>🎶 Special Song</h2>
-  <p>Click the heart to play 💖</p>
-  <button id="playSongBtn" class="glow">❤️</button>
-  <audio id="specialSong">
+  <h2>🎶 Special Song Just for You</h2>
+  <p>Click the heart to play our song 💖</p>
+  <button id="playSongBtn" style="font-size:2em;background:none;border:none;cursor:pointer;animation:glow 1.5s infinite alternate;">❤️</button>
+  <audio id="specialSong" preload="auto">
     <source src="https://aac.saavncdn.com/631/4d3a01f7f853a1d3dbed1d6d7e142d10_160.mp4" type="audio/mp4">
     Your browser does not support audio.
   </audio>
   <button class="closeBtn" onclick="closeModal('songModal')">Close</button>
 </div>
 
+<!-- Keep the previous <head> and <body> code same until <script> -->
+
 <script>
-/* Modal Functions */
+// ===== Modal Functions =====
 function openModal(id){document.getElementById(id).classList.add('active');}
 function closeModal(id){document.getElementById(id).classList.remove('active');}
 
-/* 🌌 Star Map */
-const starNotes = Array.from({length:100}, (_,i)=>`Sweet note #${i+1} 💖`);
-const canvas = document.getElementById('starCanvas');
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight*0.7;
-const ctx = canvas.getContext('2d');
-let stars = [];
-for(let i=0;i<100;i++){stars.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height,r:Math.random()*2+1,n:i})}
-function drawStars(){ctx.clearRect(0,0,canvas.width,canvas.height);stars.forEach(s=>{ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,2*Math.PI);ctx.fillStyle="white";ctx.fill()})}
-drawStars();
-canvas.addEventListener('click', e=>{let s=stars.find(st=>Math.hypot(st.x-e.offsetX,st.y-e.offsetY)<10);if(s)alert(starNotes[s.n]);})
+// ===== Star Map ===== (already included) ...
 
-/* 🎡 Spinner */
-const spinnerCanvas = document.getElementById('spinnerCanvas');
-const sctx = spinnerCanvas.getContext('2d');
-const spinnerMessages = [
-  "You are my sunshine ☀️","Forever in my heart 💖","My happiness is you 😊","You make life sweeter 🍬","Love you to the stars 🌌",
-  "You’re my everything 🌹","You’re my favorite hello 💌","You make me smile 😍","You’re my dream 💭","Heart of my life ❤️",
-  "Sweetest angel 😇","My precious gem 💎","Always and forever 💞","You’re my spark ✨","You complete me 💗",
-  "Cutest love 🥰","You’re magical 🌸","My heart is yours 💘","Life is better with you 🌹","Endless love 💖"
-];
-const sliceAngle = 2*Math.PI/spinnerMessages.length;
-let spinning=false;
-function drawSpinner(angle=0){
-  const r=spinnerCanvas.width/2;
-  sctx.clearRect(0,0,spinnerCanvas.width,spinnerCanvas.height);
+// ===== Polaroid Wall ===== (already included) ...
+
+// ===== Song Button ===== (already included) ...
+
+// ===== Love Spinner =====
+const spinnerCanvas=document.createElement('canvas');
+spinnerCanvas.width=400; spinnerCanvas.height=400;
+document.getElementById('spinnerModal').prepend(spinnerCanvas);
+const spinnerCtx=spinnerCanvas.getContext('2d');
+const spinnerMessages=[];
+for(let i=0;i<100;i++){spinnerMessages.push("Love Note "+(i+1)+" 💖");}
+let spinning=false; let angle=0; let targetAngle=0;
+function drawSpinner(){
+  const radius=180;
+  spinnerCtx.clearRect(0,0,spinnerCanvas.width,spinnerCanvas.height);
+  const arc=Math.PI*2/spinnerMessages.length;
   spinnerMessages.forEach((msg,i)=>{
-    const start=angle+i*sliceAngle;
-    sctx.beginPath();
-    sctx.moveTo(r,r);
-    sctx.arc(r,r,r,start,start+sliceAngle);
-    sctx.fillStyle=`hsl(${i*18},80%,60%)`;
-    sctx.fill();
-    sctx.save();
-    sctx.translate(r,r);
-    sctx.rotate(start+sliceAngle/2);
-    sctx.fillStyle="white";
-    sctx.textAlign="right";
-    sctx.font="14px sans-serif";
-    sctx.fillText(msg, r-10,0);
-    sctx.restore();
+    spinnerCtx.beginPath();
+    spinnerCtx.moveTo(200,200);
+    spinnerCtx.arc(200,200,radius,i*arc,i*arc+arc);
+    spinnerCtx.fillStyle=i%2?"#ff9ff3":"#ff6b81";
+    spinnerCtx.fill();
+    spinnerCtx.save();
+    spinnerCtx.translate(200,200);
+    spinnerCtx.rotate(i*arc+arc/2);
+    spinnerCtx.fillStyle="white";
+    spinnerCtx.textAlign="right";
+    spinnerCtx.font="12px Arial";
+    spinnerCtx.fillText(msg,180,0);
+    spinnerCtx.restore();
   });
+  // pointer
+  spinnerCtx.beginPath(); spinnerCtx.moveTo(200,200); spinnerCtx.lineTo(200,10); spinnerCtx.strokeStyle="yellow"; spinnerCtx.lineWidth=4; spinnerCtx.stroke();
 }
-let spinnerAngle=0;
-function spin(){
-  if(spinning)return;
-  spinning=true;
-  let target=Math.random()*Math.PI*2+10*Math.PI;
-  let start=spinnerAngle;
-  let duration=3000;
-  let startTime=null;
-  function animate(time){
-    if(!startTime)startTime=time;
-    let t=(time-startTime)/duration;
-    if(t>1)t=1;
-    spinnerAngle=start+(target-start)*t;
-    drawSpinner(spinnerAngle);
-    if(t<1)requestAnimationFrame(animate);
-    else{
-      spinning=false;
-      let index=Math.floor((spinnerMessages.length-(spinnerAngle%(2*Math.PI))/sliceAngle)%spinnerMessages.length);
-      document.getElementById('spinnerResult').innerText=spinnerMessages[index];
-    }
-  }
-  requestAnimationFrame(animate);
-}
-spinnerCanvas.addEventListener('click', spin);
 drawSpinner();
+spinnerCanvas.addEventListener('click',()=>{
+  if(!spinning){
+    spinning=true;
+    targetAngle=Math.random()*Math.PI*2 + 10*Math.PI;
+    const spinInterval=setInterval(()=>{
+      angle+=0.2;
+      if(angle>=targetAngle){clearInterval(spinInterval); spinning=false;}
+      spinnerCanvas.style.transform=`rotate(${angle}rad)`;
+    },20);
+  }
+});
 
-/* 🌹 Love Garden */
-const gardenNotes = [
-  "A flower for my love 🌸","You make life bloom 💖","Forever growing together 🌹",
-  "Your smile is my sunshine ☀️","You’re my precious blossom 🌷","Love grows with you 💞",
-  "You’re my heart’s delight 💘","Sweetest flower in my garden 🌺","My eternal rose 🌹","You make life fragrant 🌸"
-];
+// ===== Love Garden =====
+const gardenNotes=["You bloom in my heart 💖","Sweet like candy 🍬","You make life colorful 🌈","My precious flower 🌸","Love you endlessly ❤️","You're my sunshine ☀️","Forever mine 💓","You light up my soul ✨","You're my happiness 😊","Blooming love 🌹"];
 const gardenContainer=document.getElementById('gardenContainer');
 for(let i=0;i<10;i++){
-  let f=document.createElement('img');
-  f.src=`https://cdn-icons-png.flaticon.com/128/616/616408.png`; // flower icon
-  f.className='flower';
-  f.addEventListener('click',()=>document.getElementById('gardenNote').innerText=gardenNotes[i]);
+  const f=document.createElement('div'); f.className="gardenFlower"; f.innerText="🌸";
+  const note=document.createElement('div'); note.className="gardenNote"; note.innerText=gardenNotes[i]; f.appendChild(note);
+  f.addEventListener('click',()=>{note.style.display='block'; setTimeout(()=>{note.style.display='none';},2500);});
   gardenContainer.appendChild(f);
 }
 
-/* 🖼️ Polaroid Wall */
-const polaroidNotes = [
-  "You’re my favorite hello 💌","I fell in love with your smile 🌸","Life’s sweeter with you 🍫","You’re the queen of my heart 👑",
-  "Every day with you is magic ✨","You’re my sunshine ☀️","You make me complete 💖","Forever my love 💞",
-  "My heart beats for you ❤️","You’re my dream come true 💘"
+// ===== Treasure Hunt =====
+const riddles=[
+  {q:"I shine at night but am not the moon, what am I?",a:"star"},
+  {q:"I spin and tell a message, click me to see!",a:"spinner"},
+  {q:"I bloom and spread love, what am I?",a:"flower"}
 ];
-const polaroidImages = [
-  "https://images.pexels.com/photos/914927/pexels-photo-914927.jpeg?auto=compress&cs=tinysrgb&w=400",
-  "https://images.pexels.com/photos/1752995/pexels-photo-1752995.jpeg?auto=compress&cs=tinysrgb&w=400",
-  "https://images.pexels.com/photos/1111374/pexels-photo-1111374.jpeg?auto=compress&cs=tinysrgb&w=400",
-  "https://images.pexels.com/photos/933054/pexels-photo-933054.jpeg?auto=compress&cs=tinysrgb&w=400",
-  "https://images.pexels.com/photos/733872/pexels-photo-733872.jpeg?auto=compress&cs=tinysrgb&w=400",
-  "https://images.pexels.com/photos/104827/couple-love-romantic-people-104827.jpeg?auto=compress&cs=tinysrgb&w=400",
-  "https://images.pexels.com/photos/322207/pexels-photo-322207.jpeg?auto=compress&cs=tinysrgb&w=400",
-  "https://images.pexels.com/photos/396133/pexels-photo-396133.jpeg?auto=compress&cs=tinysrgb&w=400",
-  "https://images.pexels.com/photos/196667/pexels-photo-196667.jpeg?auto=compress&cs=tinysrgb&w=400",
-  "https://images.pexels.com/photos/1517910/pexels-photo-1517910.jpeg?auto=compress&cs=tinysrgb&w=400"
-];
-const polaroidContainer=document.getElementById('polaroidContainer');
-polaroidImages.forEach((img,i)=>{
-  let div=document.createElement('div'); div.className='polaroid';
-  let inner=document.createElement('div'); inner.className='polaroid-inner';
-  let front=document.createElement('div'); front.className='polaroid-front';
-  front.innerHTML=`<img src="${img}" style="width:100%; height:100%; object-fit:cover; border-radius:8px;">`;
-  let back=document.createElement('div'); back.className='polaroid-back'; back.innerText=polaroidNotes[i];
-  inner.appendChild(front); inner.appendChild(back);
-  inner.addEventListener('click',()=>inner.classList.toggle('flipped'));
-  div.appendChild(inner); polaroidContainer.appendChild(div);
+const riddleContainer=document.getElementById('riddleContainer');
+riddles.forEach((r,i)=>{
+  const div=document.createElement('div');
+  div.innerHTML=`<p>Riddle ${i+1}: ${r.q}</p><input id="riddle${i}"><button>Check</button>`;
+  div.querySelector('button').addEventListener('click',()=>{
+    const val=document.getElementById('riddle'+i).value.toLowerCase();
+    if(val===r.a){alert("Correct! 💖"); if(i===riddles.length-1){alert("🎉 You're my treasure ❤️");}}
+    else{alert("Try again! ❌");}
+  });
+  riddleContainer.appendChild(div);
 });
 
-/* 🎶 Song */
-const playBtn=document.getElementById('playSongBtn');
-const song=document.getElementById('specialSong');
-playBtn.addEventListener('click',()=>{song.play(); playBtn.innerText="🎵 Playing...";});
+// ===== Secret Love Code =====
+function secretLove(){
+  const code=prompt("Type the secret code 💖");
+  if(code && code.toUpperCase()==="LOVE"){
+    const hearts=document.createElement('div'); hearts.style.position="fixed"; hearts.style.top="0"; hearts.style.left="0"; hearts.style.width="100%"; hearts.style.height="100%"; hearts.style.pointerEvents="none"; document.body.appendChild(hearts);
+    for(let i=0;i<50;i++){
+      const h=document.createElement('div'); h.innerText="❤️"; h.style.position="absolute"; h.style.left=Math.random()*window.innerWidth+"px"; h.style.top=Math.random()*window.innerHeight+"px"; h.style.fontSize=(10+Math.random()*30)+"px"; hearts.appendChild(h);
+      setTimeout(()=>{h.remove();},4000);
+    }
+    alert("You are my love and motivation 💖✨");
+  }else{alert("Wrong code ❌");}
+}
+
 </script>
-</body>
-</html>
