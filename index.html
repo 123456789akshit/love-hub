@@ -13,28 +13,18 @@
       text-align: center;
       overflow-x: hidden;
     }
+    h1 { margin-top: 20px; font-size: 2.5em; }
 
-    h1 {
-      margin-top: 20px;
-      font-size: 2.5em;
-    }
-
-    /* === Background Stars === */
+    /* === Stars === */
     .star {
       position: absolute;
-      width: 6px;
-      height: 6px;
+      width: 6px; height: 6px;
       background: white;
       border-radius: 50%;
       cursor: pointer;
       animation: twinkle 2s infinite ease-in-out;
     }
-    @keyframes twinkle {
-      0%, 100% { opacity: 0.3; }
-      50% { opacity: 1; }
-    }
-
-    /* Floating Notes (stars + spinner) */
+    @keyframes twinkle { 0%,100%{opacity:0.3;} 50%{opacity:1;} }
     .floating-note {
       position: absolute;
       color: #ffccff;
@@ -45,30 +35,34 @@
       pointer-events: none;
     }
     @keyframes floatUp {
-      0% { opacity: 1; transform: translateY(0); }
-      100% { opacity: 0; transform: translateY(-50px); }
+      0% {opacity:1; transform:translateY(0);}
+      100% {opacity:0; transform:translateY(-50px);}
     }
 
     /* === Spinner === */
     #spinner-container {
       margin: 40px auto;
       position: relative;
-      width: 300px;
-      height: 300px;
+      width: 350px; height: 350px;
     }
-    #spinner {
-      width: 100%;
-      height: 100%;
+    #wheel {
+      width: 100%; height: 100%;
       border-radius: 50%;
       border: 8px solid #ff66b2;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.2em;
-      font-weight: bold;
-      background: radial-gradient(circle, #ffb3d9, #ff4da6);
+      transition: transform 4s cubic-bezier(.17,.67,.83,.67);
+    }
+    #spin-btn {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      background: #ff66b2;
+      border: none;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 50%;
       cursor: pointer;
-      transition: transform 3s ease-out;
+      font-size: 1em;
+      box-shadow: 0px 4px 8px rgba(0,0,0,0.5);
     }
 
     /* === Love Garden === */
@@ -79,203 +73,229 @@
       gap: 20px;
       max-width: 500px;
     }
-    .flower {
-      font-size: 2em;
-      cursor: pointer;
-      transition: transform 0.6s ease;
-      display: inline-block;
-    }
-    .flower.animate {
-      transform: scale(1.6) rotate(360deg);
-    }
-    .flower-note {
-      font-size: 0.9em;
-      margin-top: 5px;
-      color: #ff99cc;
-      display: none;
-      animation: fadeIn 1s ease;
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
+    .flower { font-size: 2em; cursor: pointer; transition: transform .6s; }
+    .flower.animate { transform: scale(1.6) rotate(360deg); }
+    .flower-note { font-size: .9em; margin-top: 5px; color:#ff99cc; display:none; animation: fadeIn 1s ease; }
+    @keyframes fadeIn { from{opacity:0;transform:translateY(10px);} to{opacity:1;transform:translateY(0);} }
 
     /* === Polaroid Wall === */
     #polaroid-wall {
       margin: 50px auto;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 15px;
-      justify-content: center;
+      display: flex; flex-wrap: wrap;
+      gap: 15px; justify-content: center;
     }
     .polaroid {
-      background: white;
-      color: black;
-      padding: 10px;
-      border-radius: 10px;
-      width: 150px;
-      box-shadow: 0px 4px 8px rgba(0,0,0,0.5);
+      background: white; color:black;
+      padding: 10px; border-radius: 10px;
+      width: 150px; box-shadow: 0px 4px 8px rgba(0,0,0,0.5);
       transform: rotate(-2deg);
     }
-    .polaroid img {
-      width: 100%;
-      border-radius: 8px;
-    }
-    .caption {
-      margin-top: 5px;
-      font-size: 0.9em;
-      font-weight: bold;
-      color: #ff4da6;
-    }
+    .polaroid img { width: 100%; border-radius: 8px; }
+    .caption { margin-top:5px; font-size:.9em; font-weight:bold; color:#ff4da6; }
 
     /* === Music Button === */
     #music-btn {
-      margin: 20px auto;
-      padding: 10px 20px;
-      border: none;
-      border-radius: 20px;
-      background: #ff66b2;
-      color: white;
-      font-size: 1em;
-      cursor: pointer;
-      box-shadow: 0px 4px 8px rgba(0,0,0,0.5);
+      margin:20px auto; padding:10px 20px;
+      border:none; border-radius:20px;
+      background:#ff66b2; color:white;
+      font-size:1em; cursor:pointer;
+      box-shadow:0px 4px 8px rgba(0,0,0,0.5);
     }
   </style>
 </head>
 <body>
-
   <h1>💖 For My Love 💖</h1>
 
-  <!-- 🎵 Background Music -->
+  <!-- 🎵 Music -->
   <audio id="bg-music" autoplay loop>
     <source src="assets/maan.mp3" type="audio/mpeg">
   </audio>
   <button id="music-btn">⏸️ Pause Music</button>
 
-  <!-- 🌌 Stars -->
+  <!-- 🌟 Stars -->
   <div id="stars"></div>
 
   <!-- 🎡 Spinner -->
   <div id="spinner-container">
-    <div id="spinner">Click to Spin 🎡</div>
+    <canvas id="wheel"></canvas>
+    <button id="spin-btn">Spin 🎡</button>
   </div>
 
-  <!-- 🌸 Love Garden -->
+  <!-- 🌸 Garden -->
   <div id="garden"></div>
 
   <!-- 📸 Polaroid Wall -->
   <div id="polaroid-wall"></div>
 
-  <script>
-    // === 100 Star Messages ===
-    const starNotes = Array.from({length: 100}, (_, i) =>
-      `⭐ You are my reason #${i+1} to smile every day ❤️`
-    );
+<script>
+/* === 100 Unique Star Messages === */
+const starNotes = [
+ "You are my sunshine on dark days 🌞","Every beat of my heart is for you 💓",
+ "Your smile makes me unstoppable 🚀","I love the way you make life magical ✨",
+ "You’re my dream and my reality 💖","With you, everything feels right 🌈",
+ "Your love is my greatest treasure 💎","You make me want to be the best me 🌟",
+ "Every hug from you feels like home 🏡","You’re my strength and my softness 🌹",
+ "My love grows with you every day 🌱","Forever feels short with you ⏳",
+ "You make my soul shine ✨","Your eyes are my favorite universe 🌌",
+ "You’re the melody of my heart 🎶","Every kiss is a new adventure 💋",
+ "You inspire me endlessly 🌟","You’re my best decision ever 💕",
+ "Love with you is my favorite journey 🚗❤️","You’re the reason I believe in magic 🪄",
+ "You lift me up when I fall 🌈","Your love makes me fearless 🛡️",
+ "You’re my safe place 🤗","My heart beats your name 💓",
+ "With you, every day is Valentine’s 💝","Your touch heals me 💞",
+ "You’re my forever motivation 💪","You’re the sparkle in my stars 🌟",
+ "Our love is endless like the sky ☁️","You complete my puzzle 🧩",
+ "You’re my light in the storm ⛈️","Life with you is poetry 📖",
+ "You’re my lucky star ⭐","You turn my chaos into calm 🌊",
+ "I bloom with your love 🌸","You’re my partner in everything 🤝",
+ "I fall for you every second ⏰","My dreams all lead to you 🌙",
+ "You’re my sweetest habit 🍫","Every laugh with you is priceless 😂❤️",
+ "I’m proud to call you mine 👑","You’re my universe 🌌",
+ "Your love fuels me 🔥","You’re the reason behind my smile 😊",
+ "I adore you more than words 💕","You’re my best story 📖",
+ "Love is sweeter with you 🍯","You’re my spark of hope ✨",
+ "You’re my secret of happiness 😍","You make my world colorful 🌈",
+ "My future is you ❤️","I need you like air 💨",
+ "You’re my inspiration 🎨","You’re the flame in my heart 🔥",
+ "My forever starts with you 💍","You’re my guiding star 🌟",
+ "With you, I feel alive 🌸","You’re my perfect song 🎵",
+ "You make ordinary days special 🌹","I want all my tomorrows with you 🌅",
+ "You’re my prayer come true 🙏","You’re my reason to try harder 💪",
+ "Your love is my strength 🛡️","You’re my happiness machine 💖",
+ "You’re my favorite hello 👋","My best moments are with you 🥰",
+ "You’re my sweetest dream 💭","I want to grow old with you 👵❤️👴",
+ "You’re my soulmate 💞","My heart belongs to you 🔑",
+ "You’re the best part of my day 🌸","You’re my miracle 💫",
+ "I’m lost in your eyes 👀","You’re my shooting star 💫",
+ "My life is better with you 🌺","You’re the reason I shine 🌟",
+ "I love you more each day 💖","You’re my destiny 💍",
+ "You’re my happiness pill 💊","You’re my angel 😇",
+ "You’re my home 🏠","You’re my heartbeat ❤️",
+ "You’re my sweetest blessing 💝","You’re the magic in my life ✨",
+ "You’re my comfort zone 🤍","I’m addicted to your love 💘",
+ "You’re my sun and moon 🌞🌙","My joy is you 🌸",
+ "You’re my happy place 🌺","You’re my endless love ♾️",
+ "You’re my sweetest escape 🌈","You’re my smile keeper 😊",
+ "You’re my fairy tale 🧚","You’re my wonderland 🌌",
+ "I’m lucky to have you 🍀","You’re my forever muse 🎨",
+ "You’re my starlight ✨","You’re my peace 🌊",
+ "You’re my only one ❤️","You’re my firework 🎆",
+ "You’re my treasure chest 💎","You’re my magic spell 🪄",
+ "You’re my today and tomorrow 🌅","You’re my universe’s gift 🎁",
+ "You’re my soulmate’s song 🎶","You’re my heart’s choice 💖"
+];
 
-    // === Spinner Messages (20 romantic lines) ===
-    const spinnerMessages = [
-      "You’re my forever 🌹","Your smile is my sunshine ☀️","With you, I’m the best me 💪❤️",
-      "You light up my world ✨","Holding your hand feels like home 🏡💞","You make my heart race 🏎️❤️",
-      "Every moment with you is magic ✨","You’re my lucky charm 🍀💖","Forever is not enough with you ⏳",
-      "You inspire me to be better 🌈","You’re my dream come true 🌙💓","Your laugh is my favorite song 🎶",
-      "I fall for you more each day 💖","You keep me going, always 🚀❤️","You’re my sweetest addiction 🍫💘",
-      "Together, we’re unstoppable 🔥","I’m proud of you always 🌟","My love for you is endless ♾️",
-      "You’re my treasure chest 💎❤️","Life with you is the real luxury 💝"
-    ];
+/* === Create Stars === */
+const starsContainer = document.getElementById("stars");
+for (let i = 0; i < 100; i++) {
+  const star = document.createElement("div");
+  star.className = "star";
+  star.style.top = `${Math.random() * 100}vh`;
+  star.style.left = `${Math.random() * 100}vw`;
+  star.addEventListener("click", () => {
+    const note = document.createElement("div");
+    note.className = "floating-note";
+    note.style.top = star.style.top;
+    note.style.left = star.style.left;
+    note.textContent = starNotes[i];
+    starsContainer.appendChild(note);
+    setTimeout(() => note.remove(), 3000);
+  });
+  starsContainer.appendChild(star);
+}
 
-    // === Create Stars ===
-    const starsContainer = document.getElementById("stars");
-    for (let i = 0; i < 100; i++) {
-      const star = document.createElement("div");
-      star.className = "star";
-      star.style.top = `${Math.random() * 100}vh`;
-      star.style.left = `${Math.random() * 100}vw`;
+/* === Spinner Wheel === */
+const wheelCanvas = document.getElementById("wheel");
+const ctx = wheelCanvas.getContext("2d");
+const spinBtn = document.getElementById("spin-btn");
+const messages = [
+ "You’re my forever 🌹","Your smile is my sunshine ☀️","With you, I’m my best me 💪",
+ "You light up my world ✨","Home is holding your hand 🏡","My heart races for you ❤️",
+ "Every moment is magic ✨","You’re my lucky charm 🍀","Forever isn’t enough ⏳",
+ "You inspire me 🌈","You’re my dream 🌙","Your laugh is my song 🎶",
+ "I fall more each day 💖","You keep me going 🚀","You’re my sweetest addiction 🍫",
+ "Together, unstoppable 🔥","I’m proud of you 🌟","My love is endless ♾️",
+ "You’re my treasure 💎","Life with you is luxury 💝"
+];
+let slices = messages.length;
+let sliceDeg = 360 / slices;
 
-      star.addEventListener("click", () => {
-        const note = document.createElement("div");
-        note.className = "floating-note";
-        note.style.top = star.style.top;
-        note.style.left = star.style.left;
-        note.textContent = starNotes[i];
-        starsContainer.appendChild(note);
-        setTimeout(() => note.remove(), 3000);
-      });
+// Draw Wheel
+function drawWheel() {
+  for (let i=0;i<slices;i++) {
+    let angle = i*sliceDeg*Math.PI/180;
+    ctx.beginPath();
+    ctx.moveTo(175,175);
+    ctx.arc(175,175,175,angle,angle+sliceDeg*Math.PI/180);
+    ctx.fillStyle = i%2===0 ? "#ff99cc" : "#ff66b2";
+    ctx.fill();
+    ctx.save();
+    ctx.translate(175,175);
+    ctx.rotate(angle+sliceDeg/2*Math.PI/180);
+    ctx.fillStyle="white";
+    ctx.font="14px Poppins";
+    ctx.textAlign="right";
+    ctx.fillText(messages[i],160,5);
+    ctx.restore();
+  }
+}
+drawWheel();
 
-      starsContainer.appendChild(star);
-    }
+// Spin
+let deg=0;
+spinBtn.addEventListener("click",()=>{
+  let spins=360*5+Math.floor(Math.random()*360);
+  deg+=spins;
+  wheelCanvas.style.transform=`rotate(${deg}deg)`;
+});
 
-    // === Spinner Logic ===
-    const spinner = document.getElementById("spinner");
-    const spinnerContainer = document.getElementById("spinner-container");
+/* === Garden === */
+const garden=document.getElementById("garden");
+const flowers=["🌹 You make me bloom 🌹","🌸 You color my life 🌸","🌼 You’re my sunshine 🌼",
+ "🌻 You brighten my soul 🌻","💐 You’re my bouquet of joy 💐","🌷 You’re my forever spring 🌷",
+ "🌺 You’re my paradise 🌺","🥀 You heal me with love 🥀","🪷 You calm my heart 🪷","🌱 You grow my happiness 🌱"];
+flowers.forEach(f=>{
+  const div=document.createElement("div");
+  const [emoji,text]=f.split(" ");
+  div.innerHTML=`<div class="flower">${emoji}</div><div class="flower-note">${text}</div>`;
+  const flowerEl=div.querySelector(".flower");
+  const note=div.querySelector(".flower-note");
+  flowerEl.addEventListener("click",()=>{
+    flowerEl.classList.add("animate");
+    setTimeout(()=>flowerEl.classList.remove("animate"),600);
+    note.style.display=note.style.display==="block"?"none":"block";
+  });
+  garden.appendChild(div);
+});
 
-    spinner.addEventListener("click", () => {
-      const randomDeg = 3600 + Math.floor(Math.random() * 360);
-      spinner.style.transform = `rotate(${randomDeg}deg)`;
+/* === Polaroid Wall === */
+const polaroidWall=document.getElementById("polaroid-wall");
+const cars=[
+ {src:"https://upload.wikimedia.org/wikipedia/commons/4/44/BMW.svg",caption:"BMW Love 💙"},
+ {src:"https://upload.wikimedia.org/wikipedia/commons/9/9d/Porsche_logo.svg",caption:"Porsche Passion 🖤"},
+ {src:"https://upload.wikimedia.org/wikipedia/commons/d/d3/Lamborghini_Logo.svg",caption:"Lambo Dreams 💛"},
+ {src:"https://upload.wikimedia.org/wikipedia/en/0/0d/Ferrari-Logo.svg",caption:"Ferrari Fire ❤️"},
+ {src:"https://upload.wikimedia.org/wikipedia/commons/8/88/Pagani_Logo.svg",caption:"Pagani Magic 💫"},
+ {src:"https://upload.wikimedia.org/wikipedia/commons/d/d2/Koenigsegg_logo.svg",caption:"Koenigsegg Power 🔥"}
+];
+cars.forEach(c=>{
+  const card=document.createElement("div");
+  card.className="polaroid";
+  card.innerHTML=`<img src="${c.src}"><div class="caption">${c.caption}</div>`;
+  polaroidWall.appendChild(card);
+});
 
-      setTimeout(() => {
-        const msg = spinnerMessages[Math.floor(Math.random() * spinnerMessages.length)];
-        const note = document.createElement("div");
-        note.className = "floating-note";
-        note.style.top = "50%";
-        note.style.left = "50%";
-        note.style.transform = "translate(-50%, -50%)";
-        note.textContent = "🎡 " + msg;
-        spinnerContainer.appendChild(note);
-        setTimeout(() => note.remove(), 3000);
-      }, 3000);
-    });
-
-    // === Garden with animation ===
-    const garden = document.getElementById("garden");
-    const flowers = ["🌹","🌸","🌼","🌻","💐","🌷","🌺","🥀","🪷","🌱"];
-    flowers.forEach((flower, i) => {
-      const flowerDiv = document.createElement("div");
-      flowerDiv.innerHTML = `<div class="flower">${flower}</div><div class="flower-note">You make me bloom with love #${i+1} 💖</div>`;
-      
-      const flowerEl = flowerDiv.querySelector(".flower");
-      const note = flowerDiv.querySelector(".flower-note");
-
-      flowerEl.addEventListener("click", () => {
-        flowerEl.classList.add("animate");
-        setTimeout(() => flowerEl.classList.remove("animate"), 600);
-        note.style.display = note.style.display === "block" ? "none" : "block";
-      });
-
-      garden.appendChild(flowerDiv);
-    });
-
-    // === Polaroid Wall ===
-    const polaroidWall = document.getElementById("polaroid-wall");
-    const carImages = [
-      {src:"https://upload.wikimedia.org/wikipedia/commons/4/44/BMW.svg",caption:"BMW Love 💙"},
-      {src:"https://upload.wikimedia.org/wikipedia/commons/9/9d/Porsche_logo.svg",caption:"Porsche Passion 🖤"},
-      {src:"https://upload.wikimedia.org/wikipedia/commons/d/d3/Lamborghini_Logo.svg",caption:"Lambo Dreams 💛"},
-      {src:"https://upload.wikimedia.org/wikipedia/en/0/0d/Ferrari-Logo.svg",caption:"Ferrari Fire ❤️"},
-      {src:"https://upload.wikimedia.org/wikipedia/commons/8/88/Pagani_Logo.svg",caption:"Pagani Magic 💫"},
-      {src:"https://upload.wikimedia.org/wikipedia/commons/d/d2/Koenigsegg_logo.svg",caption:"Koenigsegg Power 🔥"}
-    ];
-    carImages.forEach(car => {
-      const polaroid = document.createElement("div");
-      polaroid.className = "polaroid";
-      polaroid.innerHTML = `<img src="${car.src}" alt="car"><div class="caption">${car.caption}</div>`;
-      polaroidWall.appendChild(polaroid);
-    });
-
-    // === Music Button ===
-    const music = document.getElementById("bg-music");
-    const musicBtn = document.getElementById("music-btn");
-    musicBtn.addEventListener("click", () => {
-      if (music.paused) {
-        music.play();
-        musicBtn.textContent = "⏸️ Pause Music";
-      } else {
-        music.pause();
-        musicBtn.textContent = "▶️ Play Music";
-      }
-    });
-  </script>
+/* === Music Button === */
+const music=document.getElementById("bg-music");
+const musicBtn=document.getElementById("music-btn");
+musicBtn.addEventListener("click",()=>{
+  if(music.paused){music.play();musicBtn.textContent="⏸️ Pause Music";}
+  else{music.pause();musicBtn.textContent="▶️ Play Music";}
+});
+</script>
 </body>
 </html>
+
 
 
 
